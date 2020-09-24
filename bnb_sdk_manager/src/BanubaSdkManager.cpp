@@ -37,7 +37,7 @@ BanubaSdkManager::~BanubaSdkManager()
 void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchronous)
 {
     if (synchronous) {
-        m_render_thread->schedule([this, &effectPath](){
+        m_render_thread->schedule([this, &effectPath]() {
             m_effect_player->effect_manager()->load(effectPath);
         });
     } else {
