@@ -7,8 +7,10 @@ Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba
     `bnb_viewer_standalone/bnb_sdk/` => `quickstart-desktop-cpp/bnb_sdk`
 3. Copy `bnb_viewer_standalone/resources/` files into `quickstart-desktop-cpp/resources` dir:
     `bnb_viewer_standalone/resources/` => `quickstart-desktop-cpp/resources`
-4. Copy and Paste your client token into appropriate section of `quickstart-desktop-cpp/realtime-camera-preview/BanubaClientToken.hpp` and `quickstart-desktop-cpp/single-image-processing/BanubaClientToken.hpp`
-5. Generate project files by executing next commands:
+4. Copy `bnb_viewer_standalone/third` files into `quickstart-desktop-cpp/third` dir:
+    `bnb_viewer_standalone/third/` => `quickstart-desktop-cpp/third`
+5. Copy and Paste your client token into appropriate section of `quickstart-desktop-cpp/realtime-camera-preview/BanubaClientToken.hpp` and `quickstart-desktop-cpp/single-image-processing/BanubaClientToken.hpp`
+6. Generate project files by executing next commands:
     ##### Windows x86 build:	
     ```
         cd %path_to_repository%
@@ -30,9 +32,9 @@ Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba
         cd build
         cmake -G Xcode ..
     ```
-6. Previous step will generate Xcode project for MacOS and Visual Studio project for Windows. Open viewer_standalone project in appropriate IDE on your platform.
-7. Select target `single-image-processingr` or `realtime-camera-preview`.
-8. Run build.
+7. Previous step will generate Xcode project for MacOS and Visual Studio project for Windows. Open viewer_standalone project in appropriate IDE on your platform.
+8. Select target `single-image-processingr` or `realtime-camera-preview`.
+9. Run build.
 
 # Contributing
 

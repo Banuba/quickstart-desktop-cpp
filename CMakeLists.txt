@@ -11,6 +11,8 @@ add_definitions(
     -DBNB_RESOURCES_FOLDER="${BNB_RESOURCES_FOLDER}"
 )
 
+include(${CMAKE_CURRENT_LIST_DIR}/cmake/utils.cmake)
+
 #
 # Main
 #
