@@ -1,0 +1,7 @@
+.idea
+.DS_Store
+/cmake-build-*
+/bnb_sdk/include
+/bnb_sdk/bin
+/bnb_sdk/mac
+/third
