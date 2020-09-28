@@ -13,6 +13,7 @@ target_link_libraries(bnb_sdk_manager
     glfw
     stb
     opencv
+    Boost::filesystem
     bnb_effect_player
 )
 

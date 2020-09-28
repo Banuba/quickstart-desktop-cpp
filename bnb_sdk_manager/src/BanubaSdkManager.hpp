@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <filesystem>
+#include <boost/filesystem.hpp>
 
 #include <bnb/utils/interfaces/all.hpp>
 #include <bnb/effect_player/interfaces/all.hpp>
@@ -30,7 +30,7 @@ public:
 
     void load_effect(const std::string& effectPath, bool synchronous);
 
-    void process_image(const std::filesystem::path& path);
+    void process_image(const boost::filesystem::path& path);
 
     void process_camera(int camera_id = 0);
 

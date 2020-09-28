@@ -45,7 +45,7 @@ void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchrono
     }
 }
 
-void BanubaSdkManager::process_image(const std::filesystem::path& path)
+void BanubaSdkManager::process_image(const boost::filesystem::path& path)
 {
     m_render_thread->schedule([this, &path]() {
                        auto name = path.filename().string();
