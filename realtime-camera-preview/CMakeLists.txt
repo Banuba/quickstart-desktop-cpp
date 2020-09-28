@@ -33,3 +33,6 @@ if (APPLE)
         XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
     )
 endif()
+
+copy_sdk(realtime-camera-preview)
+copy_third(realtime-camera-preview)
