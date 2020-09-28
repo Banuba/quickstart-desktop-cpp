@@ -13,8 +13,13 @@ target_link_libraries(bnb_sdk_manager
     glfw
     stb
     opencv
-    Boost::filesystem
     bnb_effect_player
 )
+
+if (APPLE)
+    target_link_libraries(bnb_sdk_manager
+        Boost::filesystem
+    )
+endif()
 
 target_include_directories(bnb_sdk_manager PUBLIC src/)
