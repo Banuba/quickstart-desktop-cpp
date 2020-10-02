@@ -15,10 +15,10 @@
 
 #if BNB_APPLE
     #include <boost/filesystem.hpp>
-    using namespace boost::filesystem;
+using boost::filesystem::path;
 #else
     #include <filesystem>
-    using namespace std::filesystem;
+using std::filesystem::path;
 #endif
 
 class BanubaSdkManager

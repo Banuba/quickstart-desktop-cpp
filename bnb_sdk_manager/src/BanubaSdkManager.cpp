@@ -1,7 +1,7 @@
 #include "BanubaSdkManager.hpp"
 
 #include <bnb/effect_player/utility.hpp>
-#include <bnb/spal/camera/ocv_based.hpp>
+#include <bnb/spal/camera/base.hpp>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
@@ -37,7 +37,7 @@ BanubaSdkManager::~BanubaSdkManager()
 void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchronous)
 {
     if (synchronous) {
-        m_render_thread->schedule([this, &effectPath]() {
+        m_render_thread->schedule([this, effectPath]() {
             m_effect_player->effect_manager()->load(effectPath);
         });
     } else {
@@ -47,7 +47,7 @@ void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchrono
 
 void BanubaSdkManager::process_image(const path& path)
 {
-    m_render_thread->schedule([this, &path]() {
+    m_render_thread->schedule([this, path]() {
                        auto name = path.filename().string();
                        auto img = bnb::full_image_t::load(path.string());
                        auto fmt = img.get_format();
@@ -72,7 +72,7 @@ void BanubaSdkManager::process_camera(int camera_id)
         }
         m_effect_player->push_frame(std::move(image));
     };
-    m_camera_ptr = std::make_unique<bnb::camera_ocv>(ef_cb, camera_id);
+    m_camera_ptr = bnb::create_camera_device(ef_cb, camera_id);
 }
 
 void BanubaSdkManager::start_render_thread()

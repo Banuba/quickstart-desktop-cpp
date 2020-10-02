@@ -22,6 +22,8 @@ GlfwWindow::GlfwWindow(const std::string& title)
         load_glad_functions();
 
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+
+        glfwMakeContextCurrent(nullptr);
     } catch (...) {
         glfwTerminate();
         throw;
