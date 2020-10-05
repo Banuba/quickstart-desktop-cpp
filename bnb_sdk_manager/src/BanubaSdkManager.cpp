@@ -23,9 +23,18 @@ BanubaSdkManager::BanubaSdkManager(
     , m_window_is_shown(false)
 {
     glfwSetWindowUserPointer(m_window.get_window(), this);
+    // Window size changed
     glfwSetFramebufferSizeCallback(m_window.get_window(), [](GLFWwindow* window, int width, int height) {
         auto sdk = static_cast<BanubaSdkManager*>(glfwGetWindowUserPointer(window));
         sdk->m_render_thread->update_surface_size(width, height);
+    });
+    // Pause on minimizing
+    glfwSetWindowIconifyCallback(m_window.get_window(), [](GLFWwindow* window, int iconify) {
+        auto sdk = static_cast<BanubaSdkManager*>(glfwGetWindowUserPointer(window));
+        if (iconify == GLFW_TRUE)
+            sdk->m_effect_player->playback_pause();
+        else
+            sdk->m_effect_player->playback_play();
     });
     start_render_thread();
 }
