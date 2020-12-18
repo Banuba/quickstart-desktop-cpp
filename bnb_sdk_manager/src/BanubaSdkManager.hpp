@@ -39,6 +39,7 @@ public:
     void load_effect(const std::string& effectPath, bool synchronous);
 
     void process_image(const path& path);
+    void process_frame(bnb::full_image_t image, std::function<void(bnb::data_t data)> callback);
 
     void process_camera(int camera_id = 0);
 
@@ -51,4 +52,6 @@ private:
     std::shared_ptr<bnb::camera_base> m_camera_ptr;
     std::unique_ptr<RenderThread> m_render_thread;
     bool m_window_is_shown;
+
+    std::pair<int, int> last_frame_size{0, 0};
 };
