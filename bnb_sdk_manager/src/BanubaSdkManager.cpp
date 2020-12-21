@@ -6,6 +6,11 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
+#include <chrono>
+#include <thread>
+
+using namespace std::chrono_literals;
+
 BanubaSdkManager::BanubaSdkManager(
     const std::string& window_title,
     const std::vector<std::string>& paths_to_resources,
@@ -69,7 +74,31 @@ void BanubaSdkManager::process_image(const path& path)
         .wait();
 }
 
-void BanubaSdkManager::process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
+bnb::data_t BanubaSdkManager::sync_process_frame(std::shared_ptr<bnb::full_image_t> image)
+{
+    bnb::data_t r_data;
+    m_render_thread->schedule([this, image, &r_data]() {
+        const auto& format = image.get()->get_format();
+        if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
+            m_render_thread->update_surface_size(format.width, format.height);
+            last_frame_size.first = format.width;
+            last_frame_size.second = format.height;
+        }
+        m_effect_player->push_frame(std::move(*image));
+        bool frame_ready = false;
+        while (!frame_ready) {
+            frame_ready = m_effect_player->draw() == -1 ? false : true;
+            if (frame_ready) {
+                r_data = m_effect_player->read_pixels(format.width, format.height);
+            } else {
+                std::this_thread::sleep_for(1ms);
+            }
+        }
+    }).wait();
+    return r_data;
+}
+
+void BanubaSdkManager::async_process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
 {
     m_render_thread->schedule([this, image, callback]() {
         const auto& format = image.get()->get_format();
@@ -79,8 +108,15 @@ void BanubaSdkManager::process_frame(std::shared_ptr<bnb::full_image_t> image, s
             last_frame_size.second = format.height;
         }
         m_effect_player->push_frame(std::move(*image));
-        m_effect_player->draw();
-        callback(m_effect_player->read_pixels(format.width, format.height));
+        bool frame_ready = false;
+        while (!frame_ready) {
+            frame_ready = m_effect_player->draw() == -1 ? false : true;
+            if (frame_ready) {
+                callback(m_effect_player->read_pixels(format.width, format.height));
+            } else {
+                std::this_thread::sleep_for(1ms);
+            }
+        }
     });
 }
 
