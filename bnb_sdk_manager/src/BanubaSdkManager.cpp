@@ -69,18 +69,18 @@ void BanubaSdkManager::process_image(const path& path)
         .wait();
 }
 
-void BanubaSdkManager::process_frame(bnb::full_image_t image, std::function<void(bnb::data_t data)> callback)
+void BanubaSdkManager::process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
 {
-    m_render_thread->schedule([this, image = std::move(image), callback]() {
-        const auto& fromat = image.get_format(); 
-        if (last_frame_size.first != fromat.widht || last_frame_size.second != fromat.height) {
+    m_render_thread->schedule([this, image, callback]() {
+        const auto& format = image.get()->get_format();
+        if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
             m_render_thread->update_surface_size(format.width, format.height);
             last_frame_size.first = format.width;
             last_frame_size.second = format.height;
         }
-        m_effect_player->push_frame(std::move(image));
+        m_effect_player->push_frame(std::move(*image));
         m_effect_player->draw();
-        callback(m_effect_player->read_pixels(fromat.width, format.height));
+        callback(m_effect_player->read_pixels(format.width, format.height));
     });
 }
 
