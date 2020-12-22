@@ -42,6 +42,7 @@ public:
     bnb::data_t sync_process_frame(std::shared_ptr<bnb::full_image_t> image);
     void async_process_frame(bnb::full_image_t image, std::function<void(bnb::data_t data)> callback);
     void async_process_frame_ptr(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback);
+    void async_process_frame_ptr_id(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback);
 
     void process_camera(int camera_id = 0);
 
@@ -56,4 +57,5 @@ private:
     bool m_window_is_shown;
 
     std::pair<int, int> last_frame_size{0, 0};
+    uint64_t frame_id = 0;
 };

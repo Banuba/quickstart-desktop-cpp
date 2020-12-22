@@ -142,6 +142,29 @@ void BanubaSdkManager::async_process_frame_ptr(std::shared_ptr<bnb::full_image_t
     });
 }
 
+void BanubaSdkManager::async_process_frame_ptr_id(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
+{
+    ++frame_id;
+    m_render_thread->schedule([this, current_frame = frame_id, &frame_id = frame_id, image, callback]() {
+        const auto& format = image.get()->get_format();
+        if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
+            m_render_thread->update_surface_size(format.width, format.height);
+            last_frame_size.first = format.width;
+            last_frame_size.second = format.height;
+        }
+        m_effect_player->push_frame(std::move(*image));
+        bool frame_ready = false;
+        while (!frame_ready) {
+            frame_ready = m_effect_player->draw() == -1 ? false : true;
+            if (frame_ready && current_frame == frame_id) {
+                callback(m_effect_player->read_pixels(format.width, format.height));
+            } else {
+                std::this_thread::sleep_for(1us);
+            }
+        }
+    });
+}
+
 void BanubaSdkManager::process_camera(int camera_id)
 {
     // Callback for new camera image
