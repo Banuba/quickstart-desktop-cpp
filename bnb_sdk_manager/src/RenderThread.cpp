@@ -26,6 +26,11 @@ void RenderThread::update_surface_size(int width, int height)
         });
 }
 
+void RenderThread::add_read_pixels_callback(std::function<void()> callback)
+{
+    read_pixels_callbacks.push(callback);
+}
+
 void RenderThread::thread_func()
 {
     using namespace std::chrono_literals;
@@ -41,6 +46,7 @@ void RenderThread::thread_func()
 
         if (need_swap) {
             glfwSwapBuffers(m_window);
+            run_read_pixels_callback();
         } else {
             // On effect change active_recognizer::pop_frame_data() will continuosly lock _pop_mutex,
             // m_effect_player.draw() will return false as there is nothing to draw, this loop will skip wait
@@ -52,4 +58,10 @@ void RenderThread::thread_func()
 
     m_effect_player.surface_destroyed();
     glfwMakeContextCurrent(nullptr);
+}
+
+void RenderThread::run_read_pixels_callback()
+{
+    read_pixels_callbacks.front()();
+    read_pixels_callbacks.pop();
 }

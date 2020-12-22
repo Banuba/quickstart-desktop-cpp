@@ -76,51 +76,30 @@ void BanubaSdkManager::process_image(const path& path)
 
 bnb::data_t BanubaSdkManager::sync_process_frame(std::shared_ptr<bnb::full_image_t> image)
 {
-    bnb::data_t r_data;
-    m_render_thread->schedule([this, image, &r_data]() {
-        const auto& format = image.get()->get_format();
+    bool ready = false;
+    const auto& format = image.get()->get_format();
+    m_render_thread->schedule([this, image, &ready, &format]() {
         if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
             m_render_thread->update_surface_size(format.width, format.height);
             last_frame_size.first = format.width;
             last_frame_size.second = format.height;
         }
         m_effect_player->push_frame(std::move(*image));
-        bool frame_ready = false;
-        while (!frame_ready) {
-            frame_ready = m_effect_player->draw() == -1 ? false : true;
-            if (frame_ready) {
-                r_data = m_effect_player->read_pixels(format.width, format.height);
-            } else {
-                std::this_thread::sleep_for(1ms);
-            }
-        }
-    }).wait();
-    return r_data;
-}
-
-void BanubaSdkManager::async_process_frame(bnb::full_image_t image, std::function<void(bnb::data_t data)> callback)
-{
-    const auto& format = image.get_format();
-    m_effect_player->push_frame(std::move(image));
-    m_render_thread->schedule([this, format, callback]() {
-        if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
-            m_render_thread->update_surface_size(format.width, format.height);
-            last_frame_size.first = format.width;
-            last_frame_size.second = format.height;
-        }
-        bool frame_ready = false;
-        while (!frame_ready) {
-            frame_ready = m_effect_player->draw() == -1 ? false : true;
-            if (frame_ready) {
-                callback(m_effect_player->read_pixels(format.width, format.height));
-            } else {
-                std::this_thread::sleep_for(1us);
-            }
-        }
+        auto read_pixels_callback = [&ready]() {
+            ready = true;
+        };
+        m_render_thread->add_read_pixels_callback(read_pixels_callback);
     });
+
+    while (!ready)
+    {
+        std::this_thread::sleep_for(1us);
+    }
+
+    return m_effect_player->read_pixels(format.width, format.height);
 }
 
-void BanubaSdkManager::async_process_frame_ptr(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
+void BanubaSdkManager::async_process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
 {
     m_render_thread->schedule([this, image, callback]() {
         const auto& format = image.get()->get_format();
@@ -130,38 +109,11 @@ void BanubaSdkManager::async_process_frame_ptr(std::shared_ptr<bnb::full_image_t
             last_frame_size.second = format.height;
         }
         m_effect_player->push_frame(std::move(*image));
-        bool frame_ready = false;
-        while (!frame_ready) {
-            frame_ready = m_effect_player->draw() == -1 ? false : true;
-            if (frame_ready) {
-                callback(m_effect_player->read_pixels(format.width, format.height));
-            } else {
-                std::this_thread::sleep_for(1us);
-            }
-        }
-    });
-}
 
-void BanubaSdkManager::async_process_frame_ptr_id(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
-{
-    ++frame_id;
-    m_render_thread->schedule([this, current_frame = frame_id, &frame_id = frame_id, image, callback]() {
-        const auto& format = image.get()->get_format();
-        if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
-            m_render_thread->update_surface_size(format.width, format.height);
-            last_frame_size.first = format.width;
-            last_frame_size.second = format.height;
-        }
-        m_effect_player->push_frame(std::move(*image));
-        bool frame_ready = false;
-        while (!frame_ready) {
-            frame_ready = m_effect_player->draw() == -1 ? false : true;
-            if (frame_ready && current_frame == frame_id) {
-                callback(m_effect_player->read_pixels(format.width, format.height));
-            } else {
-                std::this_thread::sleep_for(1us);
-            }
-        }
+        auto read_pixels_callback = [this, format, callback]() {
+            callback(m_effect_player->read_pixels(format.width, format.height));
+        };
+        m_render_thread->add_read_pixels_callback(read_pixels_callback);
     });
 }
 
