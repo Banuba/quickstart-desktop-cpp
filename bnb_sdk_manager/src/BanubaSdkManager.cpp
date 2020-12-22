@@ -98,7 +98,29 @@ bnb::data_t BanubaSdkManager::sync_process_frame(std::shared_ptr<bnb::full_image
     return r_data;
 }
 
-void BanubaSdkManager::async_process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
+void BanubaSdkManager::async_process_frame(bnb::full_image_t image, std::function<void(bnb::data_t data)> callback)
+{
+    const auto& format = image.get_format();
+    m_effect_player->push_frame(std::move(image));
+    m_render_thread->schedule([this, format, callback]() {
+        if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
+            m_render_thread->update_surface_size(format.width, format.height);
+            last_frame_size.first = format.width;
+            last_frame_size.second = format.height;
+        }
+        bool frame_ready = false;
+        while (!frame_ready) {
+            frame_ready = m_effect_player->draw() == -1 ? false : true;
+            if (frame_ready) {
+                callback(m_effect_player->read_pixels(format.width, format.height));
+            } else {
+                std::this_thread::sleep_for(1us);
+            }
+        }
+    });
+}
+
+void BanubaSdkManager::async_process_frame_ptr(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
 {
     m_render_thread->schedule([this, image, callback]() {
         const auto& format = image.get()->get_format();
@@ -114,7 +136,7 @@ void BanubaSdkManager::async_process_frame(std::shared_ptr<bnb::full_image_t> im
             if (frame_ready) {
                 callback(m_effect_player->read_pixels(format.width, format.height));
             } else {
-                std::this_thread::sleep_for(1ms);
+                std::this_thread::sleep_for(1us);
             }
         }
     });
