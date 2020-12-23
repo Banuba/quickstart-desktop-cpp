@@ -62,6 +62,8 @@ void RenderThread::thread_func()
 
 void RenderThread::run_read_pixels_callback()
 {
-    read_pixels_callbacks.front()();
-    read_pixels_callbacks.pop();
+    if (!read_pixels_callbacks.empty()) {
+        read_pixels_callbacks.front()();
+        read_pixels_callbacks.pop();
+    }
 }
