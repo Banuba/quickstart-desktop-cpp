@@ -42,17 +42,22 @@ public:
     bnb::data_t sync_process_frame(std::shared_ptr<bnb::full_image_t> image);
     void async_process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback);
 
+    bnb::data_t sync_process_frame_with_show(std::shared_ptr<bnb::full_image_t> image);
+    void async_process_frame_with_show(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback);
+
     void process_camera(int camera_id = 0);
 
 private:
     void start_render_thread();
+
+    void show_window(std::shared_ptr<bnb::full_image_t> image);
 
     GlfwWindow m_window;
     bnb::utility m_utility;
     std::shared_ptr<bnb::interfaces::effect_player> m_effect_player;
     std::shared_ptr<bnb::camera_base> m_camera_ptr;
     std::unique_ptr<RenderThread> m_render_thread;
-    bool m_window_is_shown;
+    bool m_window_is_shown = false;
 
     std::pair<int, int> last_frame_size{0, 0};
 };
