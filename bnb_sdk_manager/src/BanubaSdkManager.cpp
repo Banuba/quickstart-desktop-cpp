@@ -13,17 +13,33 @@ using namespace std::chrono_literals;
 
 BanubaSdkManager::BanubaSdkManager(
     const std::string& window_title,
-    const std::vector<std::string>& paths_to_resources,
-    const std::string& client_token)
-    : m_utility(paths_to_resources, client_token)
+    const std::vector<std::string>& path_to_resources,
+    const std::string& client_token
+    ) : BanubaSdkManager(window_title, path_to_resources, client_token, 720, 1280, false) {}
+
+BanubaSdkManager::BanubaSdkManager(
+    const std::string& client_token,
+    int32_t width,
+    int32_t height,
+    bool manual_audio
+    ) : BanubaSdkManager("", {BNB_RESOURCES_FOLDER}, client_token, width, height, manual_audio) {}
+
+BanubaSdkManager::BanubaSdkManager(
+    const std::string& window_title,
+    const std::vector<std::string>& path_to_resources,
+    const std::string& client_token,
+    int32_t width,
+    int32_t height,
+    bool manual_audio)
+    : m_utility(path_to_resources, client_token)
     , m_window(window_title)
     , m_effect_player(bnb::interfaces::effect_player::create({
-          720 /*fx_width*/,
-          1280 /*fx_height*/,
+          width /*fx_width*/,
+          height /*fx_height*/,
           bnb::interfaces::nn_mode::automatically /*nn_enable*/,
           bnb::interfaces::face_search_mode::good /*face_search*/,
           false /*js_debugger_enable*/,
-          false /*manual_audio*/
+          manual_audio
       }))
     , m_window_is_shown(false)
 {
@@ -57,6 +73,11 @@ void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchrono
     } else {
         m_effect_player->effect_manager()->load_async(effectPath);
     }
+}
+
+void BanubaSdkManager::unload_effect(bool synchronous)
+{
+    load_effect("", synchronous);
 }
 
 void BanubaSdkManager::process_image(const path& path)
@@ -135,4 +156,24 @@ void BanubaSdkManager::process_camera(int camera_id)
 void BanubaSdkManager::start_render_thread()
 {
     m_render_thread = std::make_unique<RenderThread>(m_window.get_window(), *m_effect_player);
+}
+
+void BanubaSdkManager::pause()
+{
+    m_effect_player->playback_pause();
+}
+
+void BanubaSdkManager::resume()
+{
+    m_effect_player->playback_play();
+}
+
+void BanubaSdkManager::enable_audio(bool enable)
+{
+    m_effect_player->enable_audio(enable);
+}
+
+void BanubaSdkManager::call_js_method(const std::string& method, const std::string& param)
+{
+    m_effect_player->effect_manager()->current()->call_js_method(method, param);
 }

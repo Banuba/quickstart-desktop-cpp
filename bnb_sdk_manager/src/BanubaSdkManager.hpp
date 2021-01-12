@@ -27,7 +27,24 @@ public:
     BanubaSdkManager(
         const std::string& window_title,
         const std::vector<std::string>& path_to_resources,
-        const std::string& client_token);
+        const std::string& client_token
+        );
+
+    BanubaSdkManager(
+        const std::string& client_token,
+        int32_t width,
+        int32_t height,
+        bool manual_audio
+        );
+
+    BanubaSdkManager(
+        const std::string& window_title,
+        const std::vector<std::string>& path_to_resources,
+        const std::string& client_token,
+        int32_t width,
+        int32_t height,
+        bool manual_audio
+        );
 
     ~BanubaSdkManager();
 
@@ -37,12 +54,20 @@ public:
     }
 
     void load_effect(const std::string& effectPath, bool synchronous);
+    void unload_effect(bool synchronous);
 
     void process_image(const path& path);
     bnb::data_t sync_process_frame(std::shared_ptr<bnb::full_image_t> image);
     void async_process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback);
 
     void process_camera(int camera_id = 0);
+
+    void pause();
+    void resume();
+
+    void enable_audio(bool enable);
+
+    void call_js_method(const std::string& method, const std::string& param);
 
 private:
     void start_render_thread();
