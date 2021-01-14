@@ -41,7 +41,6 @@ BanubaSdkManager::BanubaSdkManager(
           false /*js_debugger_enable*/,
           manual_audio
       }))
-    , m_window_is_shown(false)
 {
     glfwSetWindowUserPointer(m_window.get_window(), this);
     // Window size changed
@@ -112,8 +111,7 @@ bnb::data_t BanubaSdkManager::sync_process_frame(std::shared_ptr<bnb::full_image
         m_render_thread->add_read_pixels_callback(read_pixels_callback);
     });
 
-    while (!ready)
-    {
+    while (!ready) {
         std::this_thread::sleep_for(1us);
     }
 
@@ -138,6 +136,18 @@ void BanubaSdkManager::async_process_frame(std::shared_ptr<bnb::full_image_t> im
     });
 }
 
+bnb::data_t BanubaSdkManager::sync_process_frame_with_show(std::shared_ptr<bnb::full_image_t> image)
+{
+    show_window(image);
+    return sync_process_frame(image);
+}
+
+void BanubaSdkManager::async_process_frame_with_show(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
+{
+    show_window(image);
+    async_process_frame(image, callback);
+}
+
 void BanubaSdkManager::process_camera(int camera_id)
 {
     // Callback for new camera image
@@ -151,6 +161,16 @@ void BanubaSdkManager::process_camera(int camera_id)
         m_effect_player->push_frame(std::move(image));
     };
     m_camera_ptr = bnb::create_camera_device(ef_cb, camera_id);
+}
+
+void BanubaSdkManager::show_window(std::shared_ptr<bnb::full_image_t> image)
+{
+    if (!m_window_is_shown) {
+        const auto& format = image.get()->get_format();
+        m_window.show(format.width, format.height);
+        m_render_thread->update_surface_size(format.width, format.height);
+        m_window_is_shown = true;
+    }
 }
 
 void BanubaSdkManager::start_render_thread()
