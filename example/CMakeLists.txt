@@ -4,6 +4,7 @@ add_executable(example
 
 target_link_libraries(example
     bnb_sdk_manager
+    offscreen_ep
 )
 
 if (APPLE)
