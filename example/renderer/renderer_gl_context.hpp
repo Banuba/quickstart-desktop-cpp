@@ -1,8 +1,21 @@
 #pragma once
 
-#include <bnb/renderer/frame_surface_handler.hpp>
+#include <bnb/types/base_types.hpp>
 
 namespace bnb {
+
+    struct frame_surface_handler
+    {
+        camera_orientation m_orientation = camera_orientation::deg_90;
+        int shader_program = 0;
+        unsigned int vbo = 0;
+        unsigned int vao = 0;
+        unsigned int ebo = 0;
+
+        frame_surface_handler(camera_orientation orientation)
+        : m_orientation(orientation)
+        {}
+    };
 
     class renderer_gl_context
     {

@@ -1,5 +1,15 @@
-add_executable(example
-    main.cpp
+file(GLOB_RECURSE srcs
+    ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+)
+
+file(GLOB_RECURSE headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp
+)
+
+add_executable(example ${srcs})
+
+target_include_directories(example PUBLIC
+    ${include_dirs}
 )
 
 target_link_libraries(example

@@ -3,8 +3,8 @@
 #include "BanubaClientToken.hpp"
 
 #include "../offscreen_effect_player/include/offscreen_effect_player.hpp"
+#include "renderer/render_thread.hpp"
 
-// #include "renderer/camera_renderer.hpp"
 #include <iostream>
 
 using namespace std::chrono;
@@ -35,20 +35,25 @@ int main()
     int32_t width = 1280;
     int32_t height = 720;
 
-    auto ef_cb = [](bnb::full_image_t image) {
+    std::shared_ptr<GlfwWindow> window = std::make_shared<GlfwWindow>("");
+    std::cout << "START" << std::endl;
+    std::shared_ptr<render::RenderThread> render_t = std::make_shared<render::RenderThread>(window->get_window());
 
-        std::cout << image.get_format().width << std::endl;
+    auto ef_cb = [render_t](bnb::full_image_t image) {
+        std::cout << "Camera send frame to render" << std::endl;
+
+        auto image_ptr = std::make_shared<bnb::full_image_t>(std::move(image));
+
+        render_t->schedule([render_t, image_ptr]() mutable {
+            render_t->update_context(image_ptr);
+        });
     };
 
     std::shared_ptr<bnb::camera_base> m_camera_ptr = bnb::create_camera_device(ef_cb, 0);
 
-    // bnb::camera_renderer render;
-
-    std::shared_ptr<GlfwWindow> window = std::make_shared<GlfwWindow>("");
     window->show(width, height);
+    std::cout << "Running" << std::endl;
     window->run_main_loop();
-
-    while (true) {}
 
     return 0;
 }

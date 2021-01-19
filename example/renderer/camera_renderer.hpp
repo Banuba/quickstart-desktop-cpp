@@ -1,26 +1,20 @@
-#ifndef CAMERA_RENDERER_HPP
-#define CAMERA_RENDERER_HPP
-
-#include <bnb/types/frame_data.hpp>
+#pragma once
 
 #include "renderer_gl_context.hpp"
 
+#include <bnb/types/full_image.hpp>
 
 namespace bnb {
 
-class camera_renderer : protected logged_object
+class camera_renderer
 {
 public:
     camera_renderer();
-    virtual ~camera_renderer() override;
+    virtual ~camera_renderer();
 
-    void update_context(const frame_data& frame);
-    void draw();
+    void update_context(std::shared_ptr<bnb::full_image_t> image);
+    int draw();
     void release();
-
-    //
-    // Methods
-    //
 
 protected:
     static void clear_gl_vertex_data(renderer_gl_context *context);
@@ -28,17 +22,14 @@ protected:
 private:
     void initialize_vertex_data();
     void initialize_shader_data();
-    void update_camera_texture(const frame_data& frame);
-
-    //
-    // Members
-    //
+    void update_camera_texture(std::shared_ptr<bnb::full_image_t> image);
 
 private:
-    std::unique_ptr<renderer_gl_context> m_cam_image_context;
+    std::unique_ptr<renderer_gl_context> m_gl_context;
+    std::atomic<bool> m_need_draw = false;
 
+    color_plane cur_y_plane = nullptr;
+    color_plane cur_uv_plane = nullptr;
 };
 
-}
-
-#endif // CAMERA_RENDERER_HPP
+} // bnb

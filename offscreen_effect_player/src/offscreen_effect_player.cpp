@@ -20,32 +20,32 @@ namespace bnb
 
     void offscreen_effect_player::async_process_image_I420(I420_planes yuv, const image_format& image_f, std::function<void(I420_planes planes)> callback)
     {
-        pixel_bufer uv(yuv.u.size() * 2);
-        for (int32_t i = 0; i < yuv.u.size(); ++i) {
-            uv[i * 2] = yuv.u[i];
-            uv[i * 2 + 1] = yuv.v[i];
-        }
+        // pixel_bufer uv(yuv.u.size() * 2);
+        // for (int32_t i = 0; i < yuv.u.size(); ++i) {
+        //     uv[i * 2] = yuv.u[i];
+        //     uv[i * 2 + 1] = yuv.v[i];
+        // }
 
-        auto y_plane = color_plane_vector(std::move(yuv.y));
-        auto uv_plane = color_plane_vector(std::move(uv));
+        // auto y_plane = color_plane_vector(std::move(yuv.y));
+        // auto uv_plane = color_plane_vector(std::move(uv));
 
-        bnb::yuv_image_t yuv_img(std::move(y_plane), std::move(uv_plane), image_f);
-        std::shared_ptr<bnb::full_image_t> image = std::make_shared<full_image_t>(full_image_t(std::move(yuv_img)));
+        // bnb::yuv_image_t yuv_img(std::move(y_plane), std::move(uv_plane), image_f);
+        // std::shared_ptr<bnb::full_image_t> image = std::make_shared<full_image_t>(full_image_t(std::move(yuv_img)));
 
-        auto convert_callback = [image_f, callback](bnb::data_t data) {
-            bnb::bpc8_image_t bpc8(
-                bnb::color_plane_weak(data.data.get()),
-                bnb::bpc8_image_t::pixel_format_t::rgba,
-                image_f);
+        // auto convert_callback = [image_f, callback](bnb::data_t data) {
+        //     bnb::bpc8_image_t bpc8(
+        //         bnb::color_plane_weak(data.data.get()),
+        //         bnb::bpc8_image_t::pixel_format_t::rgba,
+        //         image_f);
 
-            auto y_plane = convert_bpc8_to_y_plane(bpc8, image_f.width, image_f.height);
-            auto u_plane = convert_bpc8_to_u_plane(bpc8, image_f.width, image_f.height, true);
-            auto v_plane = convert_bpc8_to_v_plane(bpc8, image_f.width, image_f.height, true);
+        //     auto y_plane = convert_bpc8_to_y_plane(bpc8, image_f.width, image_f.height);
+        //     auto u_plane = convert_bpc8_to_u_plane(bpc8, image_f.width, image_f.height, true);
+        //     auto v_plane = convert_bpc8_to_v_plane(bpc8, image_f.width, image_f.height, true);
 
-            callback(I420_planes{ std::move(y_plane), std::move(u_plane), std::move(v_plane) }); 
-        };
+        //     callback(I420_planes{ std::move(y_plane), std::move(u_plane), std::move(v_plane) }); 
+        // };
 
-        async_process_image(image, convert_callback);
+        // async_process_image(image, convert_callback);
     }
 
     void offscreen_effect_player::async_process_image_I420(pixel_bufer yuv, const image_format& image_f, std::function<void(pixel_bufer data)> callback)
@@ -60,25 +60,25 @@ namespace bnb
 
     void offscreen_effect_player::async_process_image_NV12(NV12_planes nv12, const image_format& image_f, std::function<void(NV12_planes planes)> callback)
     {
-        auto y_plane = color_plane_vector(std::move(nv12.y));
-        auto uv_plane = color_plane_vector(std::move(nv12.uv));
+        // auto y_plane = color_plane_vector(std::move(nv12.y));
+        // auto uv_plane = color_plane_vector(std::move(nv12.uv));
 
-        bnb::yuv_image_t yuv_img(std::move(y_plane), std::move(uv_plane), image_f);
-        std::shared_ptr<bnb::full_image_t> image = std::make_shared<full_image_t>(full_image_t(std::move(yuv_img)));
+        // bnb::yuv_image_t yuv_img(std::move(y_plane), std::move(uv_plane), image_f);
+        // std::shared_ptr<bnb::full_image_t> image = std::make_shared<full_image_t>(full_image_t(std::move(yuv_img)));
         
-        auto convert_callback = [image_f, callback](bnb::data_t data) {
-            bnb::bpc8_image_t bpc8(
-                bnb::color_plane_weak(data.data.get()),
-                bnb::bpc8_image_t::pixel_format_t::rgba,
-                image_f);
+        // auto convert_callback = [image_f, callback](bnb::data_t data) {
+        //     bnb::bpc8_image_t bpc8(
+        //         bnb::color_plane_weak(data.data.get()),
+        //         bnb::bpc8_image_t::pixel_format_t::rgba,
+        //         image_f);
 
-            auto y_plane = convert_bpc8_to_y_plane(bpc8, image_f.width, image_f.height);
-            auto uv_plane = convert_bpc8_to_uv_plane(bpc8, image_f.width, image_f.height, true);
+        //     auto y_plane = convert_bpc8_to_y_plane(bpc8, image_f.width, image_f.height);
+        //     auto uv_plane = convert_bpc8_to_uv_plane(bpc8, image_f.width, image_f.height, true);
 
-            callback(NV12_planes{ std::move(y_plane), std::move(uv_plane) }); 
-        };
+        //     callback(NV12_planes{ std::move(y_plane), std::move(uv_plane) }); 
+        // };
 
-        async_process_image(image, convert_callback);
+        // async_process_image(image, convert_callback);
     }
 
     // void offscreen_effect_player::async_process_image_NV12(pixel_bufer nv12, const image_format& image_f, std::function<void(pixel_bufer data)> callback)
