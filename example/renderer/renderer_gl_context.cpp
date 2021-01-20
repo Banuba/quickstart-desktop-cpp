@@ -1,12 +1,9 @@
 #include "renderer_gl_context.hpp"
 
-#include <algorithm>
-#include <glad/glad.h>
-
-namespace bnb {
+using namespace bnb;
 
 renderer_gl_context::renderer_gl_context()
-    : m_frame_surface(camera_orientation::deg_90)
+    : m_frame_surface(camera_orientation::deg_0)
     , texture_uniform_location {0, 0}
     , textures {0, 0}
 {
@@ -19,5 +16,3 @@ renderer_gl_context::~renderer_gl_context()
     }
     std::fill_n(textures, TexturesAmount, 0);
 }
-
-} // bnb
