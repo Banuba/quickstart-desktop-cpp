@@ -40,6 +40,8 @@ option(DEPLOY_BUILD "Build for deployment" OFF)
 # Targets #
 ###########
 
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/third_party)
+
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/realtime-camera-preview)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/single-image-processing)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/example)

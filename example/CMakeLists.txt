@@ -15,6 +15,7 @@ target_include_directories(example PUBLIC
 target_link_libraries(example
     bnb_sdk_manager
     offscreen_ep
+    yuv
 )
 
 if (APPLE)
