@@ -90,7 +90,7 @@ void RenderThread::thread_func()
         if (need_swap) {
             glfwSwapBuffers(m_window);
         } else {
-            std::this_thread::sleep_for(10us);
+            std::this_thread::sleep_for(1us);
         }
     }
 

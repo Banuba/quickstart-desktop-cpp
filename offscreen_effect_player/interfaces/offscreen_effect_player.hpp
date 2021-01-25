@@ -40,14 +40,6 @@ namespace bnb
             //async
             virtual void async_process_image(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback) = 0;
 
-            virtual void async_process_image_I420(I420_planes yuv, const image_format& image_f, std::function<void(I420_planes planes)> callback) = 0;
-            virtual void async_process_image_I420(pixel_bufer yuv, const image_format& image_f, std::function<void(pixel_bufer data)> callback) = 0;
-
-            virtual void async_process_image_NV12(NV12_planes nv12, const image_format& image_f, std::function<void(NV12_planes planes)> callback) = 0;
-            // virtual void async_process_image_NV12(pixel_bufer nv12, const image_format& image_f, std::function<void(pixel_bufer data)> callback) = 0;
-
-            virtual void async_process_image_RGBA(pixel_bufer rgba, const image_format& image_f, std::function<void(pixel_bufer data)> callback) = 0;
-
             virtual void load_effect(const std::string& effect_path, bool synchronous) = 0;
             virtual void unload_effect(bool synchronous) = 0;
 
