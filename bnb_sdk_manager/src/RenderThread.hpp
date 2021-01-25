@@ -37,5 +37,5 @@ private:
     std::atomic<bool> m_cancellation_flag;
     async::fifo_scheduler m_scheduler;
 
-    std::queue<std::function<void()>> read_pixels_callbacks;
+    std::queue<std::function<void()>> m_read_pixels_callbacks;
 };

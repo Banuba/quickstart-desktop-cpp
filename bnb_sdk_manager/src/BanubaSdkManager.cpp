@@ -99,10 +99,10 @@ bnb::data_t BanubaSdkManager::sync_process_frame(std::shared_ptr<bnb::full_image
     bool ready = false;
     const auto& format = image.get()->get_format();
     m_render_thread->schedule([this, image, &ready, &format]() {
-        if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
+        if (m_last_frame_size.first != format.width || m_last_frame_size.second != format.height) {
             m_render_thread->update_surface_size(format.width, format.height);
-            last_frame_size.first = format.width;
-            last_frame_size.second = format.height;
+            m_last_frame_size.first = format.width;
+            m_last_frame_size.second = format.height;
         }
         m_effect_player->push_frame(std::move(*image));
         auto read_pixels_callback = [&ready]() {
@@ -122,10 +122,10 @@ void BanubaSdkManager::async_process_frame(std::shared_ptr<bnb::full_image_t> im
 {
     m_render_thread->schedule([this, image, callback]() {
         const auto& format = image.get()->get_format();
-        if (last_frame_size.first != format.width || last_frame_size.second != format.height) {
+        if (m_last_frame_size.first != format.width || m_last_frame_size.second != format.height) {
             m_render_thread->update_surface_size(format.width, format.height);
-            last_frame_size.first = format.width;
-            last_frame_size.second = format.height;
+            m_last_frame_size.first = format.width;
+            m_last_frame_size.second = format.height;
         }
         m_effect_player->push_frame(std::move(*image));
 

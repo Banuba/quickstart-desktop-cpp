@@ -84,5 +84,5 @@ private:
     std::unique_ptr<RenderThread> m_render_thread;
     bool m_window_is_shown = false;
 
-    std::pair<int, int> last_frame_size{0, 0};
+    std::pair<int, int> m_last_frame_size{0, 0};
 };

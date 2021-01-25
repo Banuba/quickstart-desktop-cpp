@@ -28,7 +28,7 @@ void RenderThread::update_surface_size(int width, int height)
 
 void RenderThread::add_read_pixels_callback(std::function<void()> callback)
 {
-    read_pixels_callbacks.push(callback);
+    m_read_pixels_callbacks.push(callback);
 }
 
 void RenderThread::thread_func()
@@ -62,8 +62,8 @@ void RenderThread::thread_func()
 
 void RenderThread::run_read_pixels_callback()
 {
-    if (!read_pixels_callbacks.empty()) {
-        read_pixels_callbacks.front()();
-        read_pixels_callbacks.pop();
+    if (!m_read_pixels_callbacks.empty()) {
+        m_read_pixels_callbacks.front()();
+        m_read_pixels_callbacks.pop();
     }
 }
