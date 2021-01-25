@@ -4,11 +4,9 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#include <queue>
 #include <thread>
 #include <async++.h>
 
-// #include "camera_renderer.hpp"
 #include "renderer.hpp"
 
 namespace render {
@@ -34,7 +32,7 @@ public:
 private:
     void thread_func();
 
-    std::unique_ptr<bnb::renderer> m_renderer {nullptr };
+    std::unique_ptr<bnb::renderer> m_renderer { nullptr };
     GLFWwindow* m_window;
     std::thread m_thread;
     std::atomic<bool> m_cancellation_flag;
@@ -43,9 +41,11 @@ private:
     int32_t m_cur_width;
     int32_t m_cur_height;
 
-    bnb::color_plane cur_y_plane = nullptr;
-    bnb::color_plane cur_uv_plane = nullptr;
-    bnb::data_t cur_data;
+    bnb::color_plane m_cur_y_plane = nullptr;
+    bnb::color_plane m_cur_uv_plane = nullptr;
+
+    uint8_t* m_y_row_ptr;
+    uint8_t* m_uv_row_ptr;
 };
 
 } //render

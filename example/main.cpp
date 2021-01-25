@@ -7,29 +7,6 @@
 
 using namespace std::chrono;
 
-// int main()
-// {
-//     int32_t width = 1280;
-//     int32_t height = 720;
-    
-//     std::unique_ptr<bnb::offscreen_effect_player> oep = std::make_unique<bnb::offscreen_effect_player>(BNB_CLIENT_TOKEN, width, height, false);
-
-//     oep->load_effect("effects/virtual_bg", true);
-
-//     auto ef_cb = [&oep](bnb::full_image_t image) {
-//         auto call_back = [](bnb::data_t data) {
-//             std::cout << data.size << std::endl;
-//         };
-//         auto ptr_image = std::make_shared<bnb::full_image_t>(std::move(image));
-//         oep->_manager->async_process_frame_with_show(ptr_image, call_back);
-//     };
-//     std::shared_ptr<bnb::camera_base> m_camera_ptr = bnb::create_camera_device(ef_cb, 0);
-
-//     oep->_manager->run_main_loop();
-
-//     return 0;
-// }
-
 int main()
 {
     int32_t width = 1280;
