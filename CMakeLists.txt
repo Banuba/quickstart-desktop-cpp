@@ -21,9 +21,9 @@ add_definitions(
     -DBNB_VIDEO_PLAYER=$<BOOL:${BNB_VIDEO_PLAYER}>
 )
 
-
-include(${CMAKE_CURRENT_LIST_DIR}/cmake/utils.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cmake/copy_libs.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cmake/libyuv.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cmake/utils.cmake)
 
 #
 # Main
@@ -39,8 +39,6 @@ option(DEPLOY_BUILD "Build for deployment" OFF)
 ###########
 # Targets #
 ###########
-
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/third_party)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/realtime-camera-preview)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/single-image-processing)

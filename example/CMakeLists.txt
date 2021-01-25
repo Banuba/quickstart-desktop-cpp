@@ -12,6 +12,8 @@ target_include_directories(example PUBLIC
     ${include_dirs}
 )
 
+target_include_directories(example SYSTEM PUBLIC ${LIBYUV_INCLUDE_DIRS})
+
 target_link_libraries(example
     bnb_sdk_manager
     offscreen_ep
