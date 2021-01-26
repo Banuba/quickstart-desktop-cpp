@@ -57,12 +57,7 @@ public:
     void unload_effect(bool synchronous);
 
     void process_image(const path& path);
-    bnb::data_t sync_process_frame(std::shared_ptr<bnb::full_image_t> image);
     void async_process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback);
-
-    bnb::data_t sync_process_frame_with_show(std::shared_ptr<bnb::full_image_t> image);
-    void async_process_frame_with_show(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback);
-
     void process_camera(int camera_id = 0);
 
     void pause();
@@ -74,8 +69,6 @@ public:
 
 private:
     void start_render_thread();
-
-    void show_window(std::shared_ptr<bnb::full_image_t> image);
 
     GlfwWindow m_window;
     bnb::utility m_utility;

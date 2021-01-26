@@ -94,30 +94,6 @@ void BanubaSdkManager::process_image(const path& path)
         .wait();
 }
 
-bnb::data_t BanubaSdkManager::sync_process_frame(std::shared_ptr<bnb::full_image_t> image)
-{
-    bool ready = false;
-    const auto& format = image.get()->get_format();
-    m_render_thread->schedule([this, image, &ready, &format]() {
-        if (m_last_frame_size.first != format.width || m_last_frame_size.second != format.height) {
-            m_render_thread->update_surface_size(format.width, format.height);
-            m_last_frame_size.first = format.width;
-            m_last_frame_size.second = format.height;
-        }
-        m_effect_player->push_frame(std::move(*image));
-        auto read_pixels_callback = [&ready]() {
-            ready = true;
-        };
-        m_render_thread->add_read_pixels_callback(read_pixels_callback);
-    });
-
-    while (!ready) {
-        std::this_thread::sleep_for(1us);
-    }
-
-    return m_effect_player->read_pixels(format.width, format.height);
-}
-
 void BanubaSdkManager::async_process_frame(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
 {
     m_render_thread->schedule([this, image, callback]() {
@@ -136,18 +112,6 @@ void BanubaSdkManager::async_process_frame(std::shared_ptr<bnb::full_image_t> im
     });
 }
 
-bnb::data_t BanubaSdkManager::sync_process_frame_with_show(std::shared_ptr<bnb::full_image_t> image)
-{
-    show_window(image);
-    return sync_process_frame(image);
-}
-
-void BanubaSdkManager::async_process_frame_with_show(std::shared_ptr<bnb::full_image_t> image, std::function<void(bnb::data_t data)> callback)
-{
-    show_window(image);
-    async_process_frame(image, callback);
-}
-
 void BanubaSdkManager::process_camera(int camera_id)
 {
     // Callback for new camera image
@@ -161,16 +125,6 @@ void BanubaSdkManager::process_camera(int camera_id)
         m_effect_player->push_frame(std::move(image));
     };
     m_camera_ptr = bnb::create_camera_device(ef_cb, camera_id);
-}
-
-void BanubaSdkManager::show_window(std::shared_ptr<bnb::full_image_t> image)
-{
-    if (!m_window_is_shown) {
-        const auto& format = image.get()->get_format();
-        m_window.show(format.width, format.height);
-        m_render_thread->update_surface_size(format.width, format.height);
-        m_window_is_shown = true;
-    }
 }
 
 void BanubaSdkManager::start_render_thread()
