@@ -18,6 +18,8 @@ public:
     {
         return m_window;
     }
+    
+    [[nodiscard]] void* get_surface() const;
 
 private:
     // To execute scheduled tasks wake up main loop (glfwPostEmptyEvent)

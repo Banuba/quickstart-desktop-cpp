@@ -36,11 +36,18 @@ BanubaSdkManager::BanubaSdkManager(
         else
             sdk->m_effect_player->playback_play();
     });
+    
+#if !BNB_GL_BACKEND
+    m_effect_player->effect_manager()->set_render_surface(
+        reinterpret_cast<int64_t>(m_window.get_surface()));
+#endif
+    
     start_render_thread();
 }
 
 BanubaSdkManager::~BanubaSdkManager()
 {
+    m_camera_ptr = nullptr; // this will free camera
 }
 
 void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchronous)

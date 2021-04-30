@@ -2,8 +2,16 @@
 
 #include "BanubaClientToken.hpp"
 
+using namespace bnb::interfaces;
+
 int main()
 {
+#if BNB_GL_BACKEND
+    effect_player::set_render_backend(render_backend_type::opengl);
+#else
+    effect_player::set_render_backend(render_backend_type::wgpu);
+#endif
+    
     BanubaSdkManager sdk(
         "Realtime Camera Preview",
         {BanubaSdkManager::sdk_resources_path(), BNB_RESOURCES_FOLDER},
