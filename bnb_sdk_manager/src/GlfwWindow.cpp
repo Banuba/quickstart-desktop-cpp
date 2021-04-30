@@ -4,8 +4,6 @@
 #include <bnb/utils/defs.hpp>
 #include <bnb/postprocess/interfaces/postprocess_helper.hpp>
 
-#include <glad/glad.h>
-
 #include <map>
 #include <utility>
 
@@ -112,11 +110,7 @@ void GlfwWindow::load_glad_functions()
 {
 #if BNB_OS_WINDOWS || BNB_OS_MACOS
     // it's only need for use while working with dynamic libs
-    utility::load_glad_functions((GLADloadproc) glfwGetProcAddress);
-    bnb::interfaces::postprocess_helper::load_glad_functions(reinterpret_cast<int64_t>(glfwGetProcAddress));
+    utility::load_gl_functions();
 #endif
 
-    if (0 == gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-        throw std::runtime_error("gladLoadGLLoader error");
-    }
 }

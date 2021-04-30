@@ -24,6 +24,8 @@ using std::filesystem::path;
 class BanubaSdkManager
 {
 public:
+    static std::string sdk_resources_path();
+
     BanubaSdkManager(
         const std::string& window_title,
         const std::vector<std::string>& path_to_resources,
