@@ -10,7 +10,7 @@ set(BNB_SDK_SOURCES
 
 if(APPLE)
     list(APPEND BNB_SDK_SOURCES 
-        src/SdkResourcesPath.mm
+        src/BanubaSdkManager.mm
         src/GlfwWindow.mm
     )
 endif()

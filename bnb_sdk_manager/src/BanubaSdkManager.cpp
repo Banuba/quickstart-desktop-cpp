@@ -95,3 +95,9 @@ void BanubaSdkManager::start_render_thread()
 {
     m_render_thread = std::make_unique<RenderThread>(m_window.get_window(), *m_effect_player);
 }
+
+#if BNB_OS_WINDOWS || BNB_OS_LINUX // See BanubaSdkManager.mm for OSX
+std::string BanubaSdkManager::sdk_resources_path() {
+    return ".";
+}
+#endif
