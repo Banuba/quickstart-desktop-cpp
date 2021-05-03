@@ -1,10 +1,21 @@
-add_library(bnb_sdk_manager STATIC
+set(BNB_SDK_SOURCES     
     src/BanubaSdkManager.cpp
     src/BanubaSdkManager.hpp
     src/RenderThread.cpp
     src/RenderThread.hpp
     src/GlfwWindow.cpp
     src/GlfwWindow.hpp
+    src/BanubaClientToken.hpp
+)
+
+if(APPLE)
+    list(APPEND BNB_SDK_SOURCES src/SdkResourcesPath.mm)
+else()
+    list(APPEND BNB_SDK_SOURCES src/SdkResourcesPath.cpp)
+endif()
+
+add_library(bnb_sdk_manager STATIC
+    ${BNB_SDK_SOURCES}
 )
 
 target_link_libraries(bnb_sdk_manager
