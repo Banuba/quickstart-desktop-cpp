@@ -6,7 +6,7 @@ int main()
 {
     BanubaSdkManager sdk(
         "Realtime Camera Preview",
-        {BanubaSdkManager::sdk_resources_path()},
+        {BanubaSdkManager::sdk_resources_path(), BNB_RESOURCES_FOLDER},
         BNB_CLIENT_TOKEN);
     sdk.load_effect("effects/Afro", true);
     sdk.process_camera();
