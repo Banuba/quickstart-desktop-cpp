@@ -9,9 +9,9 @@ set(BNB_SDK_SOURCES
 )
 
 if(APPLE)
-    list(APPEND BNB_SDK_SOURCES src/SdkResourcesPath.mm)
-else()
-    list(APPEND BNB_SDK_SOURCES src/SdkResourcesPath.cpp)
+    list(APPEND BNB_SDK_SOURCES 
+        src/BanubaSdkManager.mm
+    )
 endif()
 
 add_library(bnb_sdk_manager STATIC
