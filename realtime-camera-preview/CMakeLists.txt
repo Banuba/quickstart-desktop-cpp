@@ -40,6 +40,14 @@ if (APPLE)
             ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaEffectPlayer.framework  
             $<TARGET_FILE_DIR:realtime-camera-preview>/../Frameworks/BanubaEffectPlayer.framework
     )
+    
+    # This dependency is optional, you may remove it. See banuba_sdk/CMakeList.txt
+    add_custom_command(TARGET realtime-camera-preview
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaPostprocess.framework
+            $<TARGET_FILE_DIR:realtime-camera-preview>/../Frameworks/BanubaPostprocess.framework
+    )
 endif()
 
 copy_sdk(realtime-camera-preview)
