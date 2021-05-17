@@ -5,11 +5,14 @@ Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba
 1. Get the latest Banuba SDK archive for MacOS/Windows and the client token. Please fill in our form on [form on banuba.com](https://www.banuba.com/face-filters-sdk) website, or contact us via [info@banuba.com](mailto:info@banuba.com).
 2. Copy `bnb_viewer_standalone/bnb_sdk/` into `quickstart-desktop-cpp/bnb_sdk` dir:
     `bnb_viewer_standalone/bnb_sdk/` => `quickstart-desktop-cpp/bnb_sdk`
-3. Copy `bnb_viewer_standalone/resources/` files into `quickstart-desktop-cpp/resources` dir:
-    `bnb_viewer_standalone/resources/` => `quickstart-desktop-cpp/resources`
+3. For Windows and Linux: copy `bnb_viewer_standalone/resources/` files into `quickstart-desktop-cpp/resources` dir:
+    `bnb_viewer_standalone/resources/` => `quickstart-desktop-cpp/resources`.
+   For MacOS: copy `bnb_viewer_standalone/resources/mac` files into `quickstart-desktop-cpp/resources/mac` dir:
+    `bnb_viewer_standalone/resources/mac` => `quickstart-desktop-cpp/resources/mac`.
 4. Copy `bnb_viewer_standalone/third` files into `quickstart-desktop-cpp/third` dir:
     `bnb_viewer_standalone/third/` => `quickstart-desktop-cpp/third`
-5. Copy and Paste your client token into appropriate section of `quickstart-desktop-cpp/realtime-camera-preview/BanubaClientToken.hpp` and `quickstart-desktop-cpp/single-image-processing/BanubaClientToken.hpp`
+5. Copy and Paste your client token into appropriate section of `quickstart-desktop-cpp/bnb_sdk_manager/BanubaClientToken.hpp`. 
+
 6. Generate project files by executing next commands:
     ##### Windows x86 build:	
     ```

@@ -12,7 +12,7 @@ if (APPLE)
         ${EXAMPLE_RESOURCES}
     )
     set(EXAMPLE_BUNDLE_NAME "Banuba Realtime Camera Perview Example") # This name can contain up to 15 characters according to Apple's documentation
-    set(EXAMPLE_COPYRIGHT "© 2020 Banuba. All rights reserved.")
+    set(EXAMPLE_COPYRIGHT "© 2021 Banuba. All rights reserved.")
     set(EXAMPLE_INFO "Banuba Realtime Camera Perview Example.")
 
     set_target_properties(realtime-camera-preview PROPERTIES
@@ -31,6 +31,22 @@ if (APPLE)
 
         # Explicitly skip code signing (CMake tries to turn it on for application bundles)
         XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
+    )
+ 
+    # copy BanubaEffectPlayer.framework to app bundle
+    add_custom_command(TARGET realtime-camera-preview 
+        POST_BUILD 					   
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
+            ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaEffectPlayer.framework  
+            $<TARGET_FILE_DIR:realtime-camera-preview>/../Frameworks/BanubaEffectPlayer.framework
+    )
+    
+    # This dependency is optional, you may remove it. See banuba_sdk/CMakeList.txt
+    add_custom_command(TARGET realtime-camera-preview
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaPostprocess.framework
+            $<TARGET_FILE_DIR:realtime-camera-preview>/../Frameworks/BanubaPostprocess.framework
     )
 endif()
 

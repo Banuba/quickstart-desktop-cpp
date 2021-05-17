@@ -1,13 +1,11 @@
 function(copy_sdk target)
     if (MSVC)
         set_property(TARGET ${target} APPEND PROPERTY LINK_FLAGS /STACK:4194304)
-        set(SDK_POSTPROCESS_LIB "bnb_postprocess")
         set(SDK_EFFECT_PLAYER_LIB "bnb_effect_player")
         set(SDK_FILE_TYPE "dll")
     elseif (APPLE)
-        set(SDK_POSTPROCESS_LIB "libbnb_postprocess")
-        set(SDK_EFFECT_PLAYER_LIB "libbnb_effect_player")
-        set(SDK_FILE_TYPE "dylib")
+        set(SDK_EFFECT_PLAYER_LIB "BanubaEffectPlayer")
+        set(SDK_FILE_TYPE "framework")
     endif ()
 
     add_custom_command(
@@ -15,7 +13,6 @@ function(copy_sdk target)
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_PROPERTY:bnb_effect_player,INTERFACE_BIN_DIR>/$<CONFIG>/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
-            $<TARGET_PROPERTY:bnb_effect_player,INTERFACE_BIN_DIR>/$<CONFIG>/${SDK_POSTPROCESS_LIB}.${SDK_FILE_TYPE}
             $<TARGET_FILE_DIR:${target}>
         COMMENT "Copy banuba dynamic libs"
     )
