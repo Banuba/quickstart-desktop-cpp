@@ -1,4 +1,4 @@
-Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba.com/docs/core/effect_player) in C++ apps.
+Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba.com/face-ar-sdk-v1/core/effect_player) in C++ apps.
 
 # Getting Started
 
