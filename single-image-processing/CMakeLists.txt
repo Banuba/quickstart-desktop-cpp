@@ -32,22 +32,6 @@ if (APPLE)
         # Explicitly skip code signing (CMake tries to turn it on for application bundles)
         XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
     )
- 
-    # copy BanubaEffectPlayer.framework to app bundle
-    add_custom_command(TARGET single-image-processing
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaEffectPlayer.framework
-            $<TARGET_FILE_DIR:single-image-processing>/../Frameworks/BanubaEffectPlayer.framework
-    )
-    
-    # This dependency is optional, you may remove it. See banuba_sdk/CMakeList.txt
-    add_custom_command(TARGET single-image-processing
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaPostprocess.framework
-            $<TARGET_FILE_DIR:single-image-processing>/../Frameworks/BanubaPostprocess.framework
-    )
 endif()
 
 copy_sdk(single-image-processing)
