@@ -26,6 +26,9 @@ target_link_libraries(bnb_sdk_manager
     opencv
     bnb_effect_player
 )
+if(BNB_GL_BACKEND)
+	target_link_libraries(bnb_sdk_manager opengl32)
+endif()
 
 if (APPLE)
     target_link_libraries(bnb_sdk_manager
