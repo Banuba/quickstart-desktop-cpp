@@ -53,7 +53,7 @@ void RenderThread::thread_func()
             std::this_thread::sleep_for(1us);
         }
     }
-
+    m_effect_player.effect_manager()->load("");
     m_effect_player.surface_destroyed();
     
 #if BNB_GL_BACKEND
