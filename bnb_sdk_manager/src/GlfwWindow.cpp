@@ -2,7 +2,6 @@
 
 #include <bnb/effect_player/utility.hpp>
 #include <bnb/utils/defs.hpp>
-#include <bnb/postprocess/interfaces/postprocess_helper.hpp>
 
 #include <glad/glad.h>
 
