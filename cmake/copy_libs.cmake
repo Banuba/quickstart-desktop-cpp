@@ -3,19 +3,28 @@ function(copy_sdk target)
         set_property(TARGET ${target} APPEND PROPERTY LINK_FLAGS /STACK:4194304)
         set(SDK_EFFECT_PLAYER_LIB "bnb_effect_player")
         set(SDK_FILE_TYPE "dll")
+
+        add_custom_command(
+            TARGET ${target}
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_PROPERTY:bnb_effect_player,INTERFACE_BIN_DIR>/$<CONFIG>/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
+                $<TARGET_FILE_DIR:${target}>
+            COMMENT "Copy banuba dynamic libs"
+        )
     elseif (APPLE)
         set(SDK_EFFECT_PLAYER_LIB "BanubaEffectPlayer")
         set(SDK_FILE_TYPE "framework")
-    endif ()
 
-    add_custom_command(
-        TARGET ${target}
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_PROPERTY:bnb_effect_player,INTERFACE_BIN_DIR>/$<CONFIG>/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
-            $<TARGET_FILE_DIR:${target}>
-        COMMENT "Copy banuba dynamic libs"
-    )
+        add_custom_command(
+            TARGET ${target}
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+                $<TARGET_PROPERTY:bnb_effect_player,INTERFACE_BIN_DIR>/$<CONFIG>/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
+                $<TARGET_FILE_DIR:${target}>/../Frameworks/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
+            COMMENT "Copy ${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}"
+        )
+        endif ()
 endfunction()
 
 function(copy_third target)
