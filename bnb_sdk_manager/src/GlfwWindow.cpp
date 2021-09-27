@@ -2,7 +2,6 @@
 
 #include <bnb/effect_player/utility.hpp>
 #include <bnb/utils/defs.hpp>
-#include <bnb/postprocess/interfaces/postprocess_helper.hpp>
 #if BNB_OS_WINDOWS
 #ifndef GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WIN32
