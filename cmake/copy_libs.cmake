@@ -55,7 +55,6 @@ function(copy_third target)
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             ${OPENAL_BIN_DIR}/OpenAL32.dll
-            ${OPENAL_BIN_DIR}/wrap_oal.dll
             $<TARGET_FILE_DIR:${target}>
         COMMENT "Copy OpenAL dlls to build dir"
     )
