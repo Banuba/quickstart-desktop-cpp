@@ -11,6 +11,7 @@ set(BNB_SDK_SOURCES
 if(APPLE)
     list(APPEND BNB_SDK_SOURCES 
         src/BanubaSdkManager.mm
+        src/GlfwWindow.mm
     )
 endif()
 
@@ -20,12 +21,14 @@ add_library(bnb_sdk_manager STATIC
 
 target_link_libraries(bnb_sdk_manager
     Async++
-    glad
     glfw
     stb
     opencv
     bnb_effect_player
 )
+if(BNB_GL_BACKEND)
+	target_link_libraries(bnb_sdk_manager opengl32)
+endif()
 
 if (APPLE)
     target_link_libraries(bnb_sdk_manager

@@ -1,6 +1,5 @@
 #pragma once
 
-#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 #include <string>
@@ -19,6 +18,8 @@ public:
     {
         return m_window;
     }
+    
+    [[nodiscard]] void* get_surface() const;
 
 private:
     // To execute scheduled tasks wake up main loop (glfwPostEmptyEvent)

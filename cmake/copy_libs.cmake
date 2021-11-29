@@ -15,16 +15,16 @@ function(copy_sdk target)
     elseif (APPLE)
         set(SDK_EFFECT_PLAYER_LIB "BanubaEffectPlayer")
         set(SDK_FILE_TYPE "framework")
+    endif ()
 
-        add_custom_command(
-            TARGET ${target}
-            POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-                $<TARGET_PROPERTY:bnb_effect_player,INTERFACE_BIN_DIR>/$<CONFIG>/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
-                $<TARGET_FILE_DIR:${target}>/../Frameworks/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
-            COMMENT "Copy ${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}"
-        )
-        endif ()
+    add_custom_command(
+        TARGET ${target}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_PROPERTY:bnb_effect_player,INTERFACE_BIN_DIR>/$<CONFIG>/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
+            $<TARGET_FILE_DIR:${target}>
+        COMMENT "Copy banuba dynamic libs"
+    )
 endfunction()
 
 function(copy_third target)
@@ -68,4 +68,16 @@ function(copy_third target)
             $<TARGET_FILE_DIR:${target}>
         COMMENT "Copy OpenAL dlls to build dir"
     )
+
+    # WGPU
+    set(WGPU_ARCH_SUFFIX $<IF:${IS_WIN64},64,86>)
+    add_custom_command(
+        TARGET ${target}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${BNB_THIRD_FOLDER}/wgpu-native/bin/win/x${WGPU_ARCH_SUFFIX}/wgpu_native.dll
+            $<TARGET_FILE_DIR:${target}>
+        COMMENT "Copy wgpu dlls to build dir"
+    )
+
 endfunction()

@@ -36,11 +36,18 @@ BanubaSdkManager::BanubaSdkManager(
         else
             sdk->m_effect_player->playback_play();
     });
+    
+#if !BNB_GL_BACKEND
+    m_effect_player->effect_manager()->set_render_surface(
+        reinterpret_cast<int64_t>(m_window.get_surface()));
+#endif
+    
     start_render_thread();
 }
 
 BanubaSdkManager::~BanubaSdkManager()
 {
+    m_camera_ptr = nullptr; // this will free camera
 }
 
 void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchronous)
@@ -57,6 +64,22 @@ void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchrono
 void BanubaSdkManager::process_image(const path& path)
 {
     m_render_thread->schedule([this, path]() {
+                       //Process 1 pixel first
+                       uint8_t data[] = {0, 0, 0, 0 };
+                       bnb::image_format format;
+                       format.orientation = bnb::camera_orientation::deg_0;
+                       format.require_mirroring = false;
+                       format.width = 1;
+                       format.height = 1;
+
+                       bnb::bpc8_image_t bpc_image(bnb::color_plane_weak(data), bnb::interfaces::pixel_format::rgba, format);
+                       bnb::full_image_t one_pixel(std::move(bpc_image));
+
+                       m_effect_player->process_image(
+                           std::move(one_pixel),
+                           bnb::interfaces::pixel_format::rgba,
+                           bnb::interfaces::process_image_params(false, std::nullopt, {}));
+
                        auto name = path.filename().string();
                        auto img = bnb::full_image_t::load(path.string());
                        auto fmt = img.get_format();

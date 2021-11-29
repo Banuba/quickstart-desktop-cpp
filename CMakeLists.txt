@@ -13,9 +13,17 @@ set(BNB_THIRD_FOLDER ${CMAKE_CURRENT_LIST_DIR}/third)
 # Set to OFF to disable ffmpeg dependency (SDK should be built with disabled video_player also)
 set(BNB_VIDEO_PLAYER ON)
 
+# Careffuly tested on OSX. Better to stay with GL on other platfoems
+if(APPLE)
+    set(BNB_GL_BACKEND OFF)
+else()
+    set(BNB_GL_BACKEND ON)
+endif()
+
 add_definitions(
     -DBNB_RESOURCES_FOLDER="${BNB_RESOURCES_FOLDER}"
     -DBNB_VIDEO_PLAYER=$<BOOL:${BNB_VIDEO_PLAYER}>
+    -DBNB_GL_BACKEND=$<BOOL:${BNB_GL_BACKEND}>
 )
 
 

@@ -30,8 +30,10 @@ void RenderThread::thread_func()
 {
     using namespace std::chrono_literals;
 
+#if BNB_GL_BACKEND
     glfwMakeContextCurrent(m_window);
     glfwSwapInterval(1);
+#endif
 
     m_effect_player.surface_created(720, 1280);
 
@@ -40,7 +42,9 @@ void RenderThread::thread_func()
         const bool need_swap{m_effect_player.draw() != -1};
 
         if (need_swap) {
+#if BNB_GL_BACKEND
             glfwSwapBuffers(m_window);
+#endif
         } else {
             // On effect change active_recognizer::pop_frame_data() will continuosly lock _pop_mutex,
             // m_effect_player.draw() will return false as there is nothing to draw, this loop will skip wait
@@ -49,7 +53,10 @@ void RenderThread::thread_func()
             std::this_thread::sleep_for(1us);
         }
     }
-
+    m_effect_player.effect_manager()->load("");
     m_effect_player.surface_destroyed();
+    
+#if BNB_GL_BACKEND
     glfwMakeContextCurrent(nullptr);
+#endif
 }

@@ -2,8 +2,6 @@
 
 #include <bnb/effect_player/interfaces/effect_player.hpp>
 
-#include <glad/glad.h>
-#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 #include <thread>
