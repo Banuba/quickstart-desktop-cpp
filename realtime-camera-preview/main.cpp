@@ -9,7 +9,7 @@ int main()
 #if BNB_GL_BACKEND
     effect_player::set_render_backend(render_backend_type::opengl);
 #else
-    effect_player::set_render_backend(render_backend_type::wgpu);
+    effect_player::set_render_backend(render_backend_type::metal);
 #endif
     
     BanubaSdkManager sdk(
