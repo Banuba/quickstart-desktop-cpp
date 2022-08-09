@@ -38,8 +38,7 @@ BanubaSdkManager::BanubaSdkManager(
     });
     
 #if !BNB_GL_BACKEND
-    m_effect_player->effect_manager()->set_render_surface(
-        reinterpret_cast<int64_t>(m_window.get_surface()));
+    m_effect_player->effect_manager()->set_render_surface(m_window.get_surface_data());
 #endif
     
     start_render_thread();
