@@ -68,15 +68,4 @@ function(copy_third target)
         COMMENT "Copy OpenAL dlls to build dir"
     )
 
-    # WGPU
-    set(WGPU_ARCH_SUFFIX $<IF:${IS_WIN64},64,86>)
-    add_custom_command(
-        TARGET ${target}
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${BNB_THIRD_FOLDER}/wgpu-native/bin/win/x${WGPU_ARCH_SUFFIX}/wgpu_native.dll
-            $<TARGET_FILE_DIR:${target}>
-        COMMENT "Copy wgpu dlls to build dir"
-    )
-
 endfunction()
