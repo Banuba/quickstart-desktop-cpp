@@ -121,6 +121,9 @@ void GlfwWindow::create_window(const std::string& title)
     if (nullptr == m_window) {
         throw std::runtime_error("glfwCreateWindow error");
     }
+#if !BNB_GL_BACKEND
+    m_metal_data = std::make_unique<metal_data>(m_window);
+#endif
 }
 
 void GlfwWindow::load_glad_functions()
@@ -131,10 +134,3 @@ void GlfwWindow::load_glad_functions()
 #endif
 
 }
-
-#if BNB_OS_WINDOWS
-void* GlfwWindow::get_surface() const
-{
-    return glfwGetWin32Window(m_window);
-}
-#endif

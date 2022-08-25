@@ -33,6 +33,7 @@ endif()
 if (APPLE)
     target_link_libraries(bnb_sdk_manager
         Boost::filesystem
+        "-framework Metal"
     )
 endif()
 
