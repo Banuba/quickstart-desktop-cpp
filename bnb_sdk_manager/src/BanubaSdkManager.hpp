@@ -12,14 +12,7 @@
 #include <bnb/effect_player/utility.hpp>
 #include <bnb/spal/camera/base.hpp>
 #include <bnb/utils/defs.hpp>
-
-#if BNB_APPLE
-    #include <boost/filesystem.hpp>
-using boost::filesystem::path;
-#else
-    #include <filesystem>
-using std::filesystem::path;
-#endif
+#include <filesystem>
 
 class BanubaSdkManager
 {
@@ -40,7 +33,7 @@ public:
 
     void load_effect(const std::string& effectPath, bool synchronous);
 
-    void process_image(const path& path);
+    void process_image(const std::filesystem::path& path);
 
     void process_camera(int camera_id = 0);
 

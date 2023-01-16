@@ -12,14 +12,12 @@ BanubaSdkManager::BanubaSdkManager(
     const std::string& client_token)
     : m_utility(paths_to_resources, client_token)
     , m_window(window_title)
-    , m_effect_player(bnb::interfaces::effect_player::create({
+    , m_effect_player(bnb::interfaces::effect_player::create(
+        bnb::interfaces::effect_player_configuration::create(
           720 /*fx_width*/,
-          1280 /*fx_height*/,
-          bnb::interfaces::nn_mode::automatically /*nn_enable*/,
-          bnb::interfaces::face_search_mode::good /*face_search*/,
-          false /*js_debugger_enable*/,
-          false /*manual_audio*/
-      }))
+          1280 /*fx_height*/
+        )
+    ))
     , m_window_is_shown(false)
 {
     glfwSetWindowUserPointer(m_window.get_window(), this);
@@ -60,7 +58,7 @@ void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchrono
     }
 }
 
-void BanubaSdkManager::process_image(const path& path)
+void BanubaSdkManager::process_image(const std::filesystem::path& path)
 {
     m_render_thread->schedule([this, path]() {
                        //Process 1 pixel first
