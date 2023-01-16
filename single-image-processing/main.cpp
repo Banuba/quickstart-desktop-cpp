@@ -17,7 +17,7 @@ int main()
         {BanubaSdkManager::sdk_resources_path(), BNB_RESOURCES_FOLDER},
         BNB_CLIENT_TOKEN);
     sdk.load_effect("effects/TrollGrandma", true);
-    auto img = path(BNB_RESOURCES_FOLDER) / "face720x1280.jpg";
+    auto img = std::filesystem::path(BNB_RESOURCES_FOLDER) / "face720x1280.jpg";
     sdk.process_image(img); // Will right result near executable or in app bundle Resources
     return 0;
 }
