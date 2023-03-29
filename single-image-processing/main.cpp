@@ -18,6 +18,6 @@ int main()
         BNB_CLIENT_TOKEN);
     sdk.load_effect("effects/TrollGrandma", true);
     auto img = std::filesystem::path(BNB_RESOURCES_FOLDER) / "face720x1280.jpg";
-    sdk.process_image(img); // Will right result near executable or in app bundle Resources
+    sdk.process_image(img); // Will write result near executable or in app bundle Resources
     return 0;
 }

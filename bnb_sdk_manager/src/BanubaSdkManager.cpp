@@ -75,7 +75,7 @@ void BanubaSdkManager::process_image(const std::filesystem::path& path)
                        m_effect_player->process_image(
                            std::move(one_pixel),
                            bnb::interfaces::pixel_format::rgba,
-                           bnb::interfaces::process_image_params(false, std::nullopt, {}));
+                           bnb::interfaces::process_image_params({}));
 
                        auto name = path.filename().string();
                        auto img = bnb::full_image_t::load(path.string());
@@ -83,7 +83,7 @@ void BanubaSdkManager::process_image(const std::filesystem::path& path)
                        auto result_img = m_effect_player->process_image(
                            std::move(img),
                            bnb::interfaces::pixel_format::rgba,
-                           bnb::interfaces::process_image_params(false, std::nullopt, {}));
+                           bnb::interfaces::process_image_params({}));
                        stbi_write_jpg(name.c_str(), fmt.width, fmt.height, 4, result_img.data.get(), 90);
                    })
         .wait();
