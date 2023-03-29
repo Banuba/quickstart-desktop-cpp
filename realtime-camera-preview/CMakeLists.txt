@@ -7,17 +7,12 @@ target_link_libraries(realtime-camera-preview
 )
 
 if (APPLE)
-    set(EXAMPLE_RESOURCES ${BNB_RESOURCES_FOLDER}/mac/bnb_viewer.icns)
-    target_sources(realtime-camera-preview PRIVATE
-        ${EXAMPLE_RESOURCES}
-    )
     set(EXAMPLE_BUNDLE_NAME "Banuba Realtime Camera Perview Example") # This name can contain up to 15 characters according to Apple's documentation
-    set(EXAMPLE_COPYRIGHT "© 2021 Banuba. All rights reserved.")
+    set(EXAMPLE_COPYRIGHT "© 2023 Banuba. All rights reserved.")
     set(EXAMPLE_INFO "Banuba Realtime Camera Perview Example.")
 
     set_target_properties(realtime-camera-preview PROPERTIES
         OUTPUT_NAME ${EXAMPLE_BUNDLE_NAME}
-        RESOURCE ${EXAMPLE_RESOURCES}
         MACOSX_BUNDLE TRUE
 
         # The same as stadrard MacOSXBundleInfo.plist.in from CMake but with camera permissions added
@@ -26,7 +21,6 @@ if (APPLE)
         MACOSX_BUNDLE_BUNDLE_NAME           ${EXAMPLE_BUNDLE_NAME}    # Sets CFBundleName
         MACOSX_BUNDLE_COPYRIGHT             ${EXAMPLE_COPYRIGHT}      # Sets NSHumanReadableCopyright
         MACOSX_BUNDLE_GUI_IDENTIFIER        "com.banuba.sdk.example"  # Sets CFBundleIdentifier
-        MACOSX_BUNDLE_ICON_FILE             bnb_viewer.icns           # Sets CFBundleIconFile
         MACOSX_BUNDLE_INFO_STRING           ${EXAMPLE_INFO}           # Sets CFBundleGetInfoString
 
         # Explicitly skip code signing (CMake tries to turn it on for application bundles)
