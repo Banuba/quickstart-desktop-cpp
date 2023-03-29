@@ -26,14 +26,6 @@ if (APPLE)
         # Explicitly skip code signing (CMake tries to turn it on for application bundles)
         XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
     )
- 
-    # copy BanubaEffectPlayer.framework to app bundle
-    add_custom_command(TARGET realtime-camera-preview 
-        POST_BUILD 					   
-        COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaEffectPlayer.framework  
-            $<TARGET_FILE_DIR:realtime-camera-preview>/../Frameworks/BanubaEffectPlayer.framework
-    )
 endif()
 
 copy_sdk(realtime-camera-preview)

@@ -10,9 +10,6 @@ include(CMakeParseArguments)
 #
 
 macro(group_sources_impl)
-    # Делаем группировку в CMake 3.8 или старше т.к только в этих версиях полявилось ключевое слово TREE.
-    # Без него делать автоматическую группировку гораздо сложнее.
-
     # We can't use GREATER_EQUAL comparison operator because it appears only in CMake version 3.7 and above.
     # So, some crappy code needed.
 
@@ -34,9 +31,6 @@ macro(group_sources_impl)
     if(maj_cond AND min_cond)
         source_group(TREE ${root} FILES ${sources})
     else()
-        # Выводим предупрежедения об отсутсвии группировки только для генераторов в которых это актуально.
-        # Например в Android NDK используется CMake 3.6, но там это предупреждение не имеет значения.
-        # TODO(a_cherkes): убрать, когда верси под Android повысится
         if(MSVC OR XCODE)
             message(WARNING "Your CMake version doesn't support source grouping. Can't group sources for target ${target}. Consider to use CMake 3.8 or higher.")
         endif()
