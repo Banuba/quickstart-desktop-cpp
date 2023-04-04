@@ -15,11 +15,9 @@ Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you
 ### Getting Started
 
 1. Clone the repository (TODO submodules?)
-2. Copy `bnb_sdk.siz/bnb_sdk/mac` or `bnb_sdk.siz/bnb_sdk/win` into `quickstart-desktop-cpp/bnb_sdk` dir.
+2. Copy `bnb_sdk.tar.gz/mac` or `bnb_sdk.zip/bnb_sdk/win` into `quickstart-desktop-cpp/bnb_sdk` dir. (TODO)
 
-3. For Windows (TODO): copy `bnb_viewer_standalone/resources/` files into `quickstart-desktop-cpp/resources` dir:
-    `bnb_viewer_standalone/resources/` => `quickstart-desktop-cpp/resources`.
-4. Copy and Paste your client token into appropriate section of [`bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/BanubaClientToken.hpp). 
+3. Copy and Paste your client token into appropriate section of [`bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/src/BanubaClientToken.hpp). 
 
 5. Generate project files by executing next commands:
     ##### Windows x86 build:	

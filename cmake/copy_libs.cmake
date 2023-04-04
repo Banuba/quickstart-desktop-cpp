@@ -32,18 +32,17 @@ function(copy_third target)
     if (NOT MSVC)
         return()
     endif ()
-    set(IS_WIN64 $<EQUAL:${CMAKE_SIZEOF_VOID_P},8>)
-    set(DEBUG_SUFFIX $<$<CONFIG:Debug>:d>)
+
+    set(ARCH_SUFFIX 64)
+    if (CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set(ARCH_SUFFIX 32)
+    endif ()
 
     # FFPMEG
-
     if (BNB_VIDEO_PLAYER)
-        set(FFMPEG_ARCH_SUFFIX 64)
-        if (CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set(FFMPEG_ARCH_SUFFIX 32)
-        endif ()
-        set(FFMPEG_BIN_DIR "${BNB_THIRD_FOLDER}/ffmpeg/win${FFMPEG_ARCH_SUFFIX}/bin")
+        set(FFMPEG_BIN_DIR ${CMAKE_SOURCE_DIR}/bnb_sdk/bin/ffmpeg/x${ARCH_SUFFIX})
         file(GLOB FFMPEG_LINK_LIBS LIST_DIRECTORIES false "${FFMPEG_BIN_DIR}/*.dll")
+        message(INFO ${FFMPEG_BIN_DIR})
 
         add_custom_command(
             TARGET ${target}
@@ -57,8 +56,8 @@ function(copy_third target)
 
     # OPENAL
 
-    set(OPENAL_ARCH_SUFFIX $<IF:${IS_WIN64},64,32>)
-    set(OPENAL_BIN_DIR ${BNB_THIRD_FOLDER}/openal/bin/Win${OPENAL_ARCH_SUFFIX})
+   
+    set(OPENAL_BIN_DIR ${CMAKE_SOURCE_DIR}/bnb_sdk/bin/openal/x${ARCH_SUFFIX})
 
     add_custom_command(
         TARGET ${target}
