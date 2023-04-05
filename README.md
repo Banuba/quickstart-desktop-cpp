@@ -14,15 +14,15 @@ Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you
 
 ### Getting Started
 
-1. Clone the repository (TODO submodules?)
-2. Copy `bnb_sdk.tar.gz/mac` or `bnb_sdk.zip/bnb_sdk/win` into `quickstart-desktop-cpp/bnb_sdk` dir. (TODO)
-
-3. Copy and Paste your client token into appropriate section of [`bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/src/BanubaClientToken.hpp). 
-
+1. Clone the repository with submodules.
+2. Copy `bnb_sdk.tar.gz/mac` (for Mac OS) or `bnb_sdk.zip/bin` with `bnb_sdk.zip/include` (for Windows) into `quickstart-desktop-cpp/bnb_sdk` dir.
+3. Windows only: copy **contents** of `bnb_sdk.zip/resources` into `quickstart-desktop-cpp/resources`.
+4. Copy and Paste your client token into appropriate section of [`quickstart-desktop-cpp/bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/src/BanubaClientToken.hpp). 
 5. Generate project files by executing next commands:
     ##### Windows x86 build:	
     ```
         cd %path_to_repository%
+        git submodule update --init --recursive
         mkdir build
         cd build
         cmake -A Win32 ..
@@ -30,6 +30,7 @@ Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you
     ##### Windows x64 build:	
     ```
         cd %path_to_repository%
+        git submodule update --init --recursive
         mkdir build
         cd build
         cmake -A x64 ..
@@ -37,6 +38,7 @@ Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you
     ##### MacOS build:	
     ```
         cd %path_to_repository%
+        git submodule update --init --recursive
         mkdir build
         cd build
         cmake -G Xcode ..
