@@ -3,9 +3,6 @@
 #include <bnb/effect_player/utility.hpp>
 #include <bnb/spal/camera/base.hpp>
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <stb_image_write.h>
-
 BanubaSdkManager::BanubaSdkManager(
     const std::string& window_title,
     const std::vector<std::string>& paths_to_resources,
@@ -58,9 +55,9 @@ void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchrono
     }
 }
 
-void BanubaSdkManager::process_image(const std::filesystem::path& path)
+bnb::data_t BanubaSdkManager::process_image(const std::filesystem::path& path)
 {
-    m_render_thread->schedule([this, path]() {
+    return m_render_thread->schedule([this, path]() {
                        //Process 1 pixel first
                        uint8_t data[] = {0, 0, 0, 0 };
                        bnb::image_format format;
@@ -84,9 +81,9 @@ void BanubaSdkManager::process_image(const std::filesystem::path& path)
                            std::move(img),
                            bnb::interfaces::pixel_format::rgba,
                            bnb::interfaces::process_image_params({}));
-                       stbi_write_jpg(name.c_str(), fmt.width, fmt.height, 4, result_img.data.get(), 90);
+                       return result_img;
                    })
-        .wait();
+        .get();
 }
 
 void BanubaSdkManager::process_camera(int camera_id)

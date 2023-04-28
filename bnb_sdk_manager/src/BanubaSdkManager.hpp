@@ -33,7 +33,7 @@ public:
 
     void load_effect(const std::string& effectPath, bool synchronous);
 
-    void process_image(const std::filesystem::path& path);
+    bnb::data_t process_image(const std::filesystem::path& path);
 
     void process_camera(int camera_id = 0);
 
