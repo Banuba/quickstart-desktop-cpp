@@ -14,21 +14,15 @@ Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you
 
 ### Getting Started
 
-1. Clone the repository
-2. Copy `bnb_viewer_standalone/bnb_sdk/` into `quickstart-desktop-cpp/bnb_sdk` dir:
-    `bnb_viewer_standalone/bnb_sdk/` => `quickstart-desktop-cpp/bnb_sdk`
-3. For Windows and Linux: copy `bnb_viewer_standalone/resources/` files into `quickstart-desktop-cpp/resources` dir:
-    `bnb_viewer_standalone/resources/` => `quickstart-desktop-cpp/resources`.
-   For MacOS: copy `bnb_viewer_standalone/resources/mac` files into `quickstart-desktop-cpp/resources/mac` dir:
-    `bnb_viewer_standalone/resources/mac` => `quickstart-desktop-cpp/resources/mac`.
-4. Copy `bnb_viewer_standalone/third` files into `quickstart-desktop-cpp/third` dir:
-    `bnb_viewer_standalone/third/` => `quickstart-desktop-cpp/third`
-5. Copy and Paste your client token into appropriate section of [`bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/BanubaClientToken.hpp). 
-
-6. Generate project files by executing next commands:
+1. Clone the repository with submodules.
+2. Copy `bnb_sdk.tar.gz/mac` (for Mac OS) or `bnb_sdk.zip/bin` with `bnb_sdk.zip/include` (for Windows) into `quickstart-desktop-cpp/bnb_sdk` dir.
+3. Windows only: copy **contents** of `bnb_sdk.zip/resources` into `quickstart-desktop-cpp/resources`.
+4. Copy and Paste your client token into appropriate section of [`quickstart-desktop-cpp/bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/src/BanubaClientToken.hpp). 
+5. Generate project files by executing next commands:
     ##### Windows x86 build:	
     ```
         cd %path_to_repository%
+        git submodule update --init --recursive
         mkdir build
         cd build
         cmake -A Win32 ..
@@ -36,6 +30,7 @@ Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you
     ##### Windows x64 build:	
     ```
         cd %path_to_repository%
+        git submodule update --init --recursive
         mkdir build
         cd build
         cmake -A x64 ..
@@ -43,13 +38,14 @@ Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you
     ##### MacOS build:	
     ```
         cd %path_to_repository%
+        git submodule update --init --recursive
         mkdir build
         cd build
         cmake -G Xcode ..
     ```
-7. Previous step will generate Xcode project for MacOS and Visual Studio project for Windows. Open viewer_standalone project in appropriate IDE on your platform.
-8. Select target `single-image-processingr` or `realtime-camera-preview`.
-9. Run build.
+6. Previous step will generate Xcode project for MacOS and Visual Studio project for Windows. Open project in appropriate IDE on your platform.
+7. Select target `single-image-processingr` or `realtime-camera-preview`.
+8. Run build.
 
 ### Docs
 You can find more info [here](https://docs.banuba.com/face-ar-sdk-v1/desktop/desktop_overview).

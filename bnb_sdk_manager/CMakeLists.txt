@@ -23,7 +23,6 @@ target_link_libraries(bnb_sdk_manager
     Async++
     glfw
     stb
-    opencv
     bnb_effect_player
 )
 if(BNB_GL_BACKEND)
@@ -33,6 +32,7 @@ endif()
 if (APPLE)
     target_link_libraries(bnb_sdk_manager
         "-framework Metal"
+        "-framework QuartzCore"
     )
 endif()
 

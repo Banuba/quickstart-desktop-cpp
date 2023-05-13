@@ -13,36 +13,36 @@ function(copy_sdk target)
             COMMENT "Copy banuba dynamic libs"
         )
     elseif (APPLE)
-        set(SDK_EFFECT_PLAYER_LIB "BanubaEffectPlayer")
-        set(SDK_FILE_TYPE "framework")
+        # copy BanubaEffectPlayer.framework to app bundle
+        add_custom_command(TARGET ${target}
+            POST_BUILD                     
+            COMMAND 
+                rm -rf $<TARGET_FILE_DIR:${target}>/../Frameworks
+                &&
+                mkdir -p $<TARGET_FILE_DIR:${target}>/../Frameworks
+                &&    
+                cp -rfP 
+                    ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaEffectPlayer.framework  
+                    $<TARGET_FILE_DIR:${target}>/../Frameworks
+        )
     endif ()
-
-    add_custom_command(
-        TARGET ${target}
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_PROPERTY:bnb_effect_player,INTERFACE_BIN_DIR>/$<CONFIG>/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}
-            $<TARGET_FILE_DIR:${target}>
-        COMMENT "Copy banuba dynamic libs"
-    )
 endfunction()
 
 function(copy_third target)
     if (NOT MSVC)
         return()
     endif ()
-    set(IS_WIN64 $<EQUAL:${CMAKE_SIZEOF_VOID_P},8>)
-    set(DEBUG_SUFFIX $<$<CONFIG:Debug>:d>)
+
+    set(ARCH_SUFFIX 64)
+    if (CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set(ARCH_SUFFIX 32)
+    endif ()
 
     # FFPMEG
-
     if (BNB_VIDEO_PLAYER)
-        set(FFMPEG_ARCH_SUFFIX 64)
-        if (CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set(FFMPEG_ARCH_SUFFIX 32)
-        endif ()
-        set(FFMPEG_BIN_DIR "${BNB_THIRD_FOLDER}/ffmpeg/win${FFMPEG_ARCH_SUFFIX}/bin")
+        set(FFMPEG_BIN_DIR ${CMAKE_SOURCE_DIR}/bnb_sdk/bin/ffmpeg/x${ARCH_SUFFIX})
         file(GLOB FFMPEG_LINK_LIBS LIST_DIRECTORIES false "${FFMPEG_BIN_DIR}/*.dll")
+        message(INFO ${FFMPEG_BIN_DIR})
 
         add_custom_command(
             TARGET ${target}
@@ -56,8 +56,8 @@ function(copy_third target)
 
     # OPENAL
 
-    set(OPENAL_ARCH_SUFFIX $<IF:${IS_WIN64},64,32>)
-    set(OPENAL_BIN_DIR ${BNB_THIRD_FOLDER}/openal/bin/Win${OPENAL_ARCH_SUFFIX})
+   
+    set(OPENAL_BIN_DIR ${CMAKE_SOURCE_DIR}/bnb_sdk/bin/openal/x${ARCH_SUFFIX})
 
     add_custom_command(
         TARGET ${target}
