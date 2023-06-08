@@ -72,7 +72,7 @@ bnb::data_t BanubaSdkManager::process_image(const std::filesystem::path& path)
                        m_effect_player->process_image(
                            std::move(one_pixel),
                            bnb::interfaces::pixel_format::rgba,
-                           bnb::interfaces::process_image_params({}));
+                           bnb::interfaces::process_image_params(false, std::nullopt, std::nullopt));
 
                        auto name = path.filename().string();
                        auto img = bnb::full_image_t::load(path.string());
@@ -80,7 +80,7 @@ bnb::data_t BanubaSdkManager::process_image(const std::filesystem::path& path)
                        auto result_img = m_effect_player->process_image(
                            std::move(img),
                            bnb::interfaces::pixel_format::rgba,
-                           bnb::interfaces::process_image_params({}));
+                           bnb::interfaces::process_image_params(false, std::nullopt, std::nullopt));
                        return result_img;
                    })
         .get();
