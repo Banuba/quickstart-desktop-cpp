@@ -15,7 +15,11 @@ int main()
     effect_player::set_render_backend(render_backend_type::metal);
     #endif
     
+    #if defined(__APPLE__)
+    const auto result_path = (std::filesystem::temp_directory_path() / "bnb_result.jpg").string();
+    #else
     const auto result_path = (std::filesystem::current_path() / "bnb_result.jpg").string();
+    #endif
     
     {
         BanubaSdkManager sdk(
