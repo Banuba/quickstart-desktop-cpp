@@ -12,6 +12,9 @@ You can store the token within the app.
 
 Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you have any questions.
 
+### Banuba SDK Build
+To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceAR-SDK-desktop-releases/releases) section in the [FaceAR-SDK-desktop-releases](https://github.com/Banuba/FaceAR-SDK-desktop-releases) repository.
+
 ### Getting Started
 
 1. Clone the repository with submodules.
