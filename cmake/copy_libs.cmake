@@ -22,7 +22,7 @@ function(copy_sdk target)
                 mkdir -p $<TARGET_FILE_DIR:${target}>/../Frameworks
                 &&    
                 cp -rfP 
-                    ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/$<CONFIG>/BanubaEffectPlayer.framework  
+                    ${CMAKE_SOURCE_DIR}/bnb_sdk/mac/BanubaEffectPlayer.framework  
                     $<TARGET_FILE_DIR:${target}>/../Frameworks
         )
     endif ()

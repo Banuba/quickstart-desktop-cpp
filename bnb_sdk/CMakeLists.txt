@@ -21,11 +21,9 @@ set_property(TARGET ${SDK_TARGET} PROPERTY INTERFACE_BIN_DIR ${SDK_COMMON_FOLDER
 if (APPLE)
     set_property(TARGET ${SDK_TARGET} PROPERTY FRAMEWORK TRUE)
 
-    target_link_libraries(${SDK_TARGET} INTERFACE debug "-F ${SDK_COMMON_FOLDER}/debug -framework ${SDK_EFFECT_PLAYER_LIB}")
-    target_link_libraries(${SDK_TARGET} INTERFACE optimized "-F ${SDK_COMMON_FOLDER}/release -framework ${SDK_EFFECT_PLAYER_LIB}")
+    target_link_libraries(${SDK_TARGET} INTERFACE "-F ${SDK_COMMON_FOLDER}/ -framework ${SDK_EFFECT_PLAYER_LIB}")
 
-    target_include_directories(${SDK_TARGET} INTERFACE debug "${SDK_COMMON_FOLDER}/debug/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}/PrivateHeaders")
-    target_include_directories(${SDK_TARGET} INTERFACE optimized "${SDK_COMMON_FOLDER}/release/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}/PrivateHeaders")
+    target_include_directories(${SDK_TARGET} INTERFACE "${SDK_COMMON_FOLDER}/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}/PrivateHeaders")
 else()
     target_link_libraries(${SDK_TARGET} INTERFACE debug "${SDK_COMMON_FOLDER}/debug/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}")
     target_link_libraries(${SDK_TARGET} INTERFACE optimized "${SDK_COMMON_FOLDER}/release/${SDK_EFFECT_PLAYER_LIB}.${SDK_FILE_TYPE}")
