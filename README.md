@@ -52,3 +52,10 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
 
 ### Docs
 You can find more info [here](https://docs.banuba.com/face-ar-sdk-v1/desktop/desktop_overview).
+
+### Makeup Config
+
+Config file of Makeup effect located here `resources/effects/makeup/config.js`
+
+Feel free to add your custom code here using the [documentation](https://docs.banuba.com/face-ar-sdk-v1/effect_api/makeup)
+
