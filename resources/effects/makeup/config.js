@@ -51,7 +51,7 @@ function test(){
 }
 
 //BrowsImage(6)
-// test()
+test()
 // BrowsColor("0.176 0.102 0.008 1.0");
 //BrowsColor("0.424 0.251 0.216 1");
 //BrowsColor("0.533 0.361 0.318 1");

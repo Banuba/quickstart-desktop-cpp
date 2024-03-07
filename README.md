@@ -2,6 +2,20 @@
 
 ## Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba.com/face-ar-sdk-v1/desktop/desktop_overview) in C++ apps.  
 
+Current example runs makeup effect by default with options:
+```js
+    EnlargeEyes(2);
+    FaceReshape(2);
+    LipsColor("1 1 0 1");
+    SkinSmoothing(2);
+    BackgroundBlur(3);
+    Makeup.blushes("1 1 0 1");
+    Eyes.color("1 0 0 1");
+    BrowsColor("1 0 0 1");
+    BrowsImage(3);
+    TeethWhitening(1)  
+```
+
 ## [Requirements](https://docs.banuba.com/face-ar-sdk-v1/overview/system_requirements)
 
 ## Usage
