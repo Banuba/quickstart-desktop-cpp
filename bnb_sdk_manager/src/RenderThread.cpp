@@ -1,6 +1,6 @@
 #include "RenderThread.hpp"
 
-#include <bnb/effect_player/interfaces/effect_manager.hpp>
+#include <bnb/effect_player/interfaces/all.hpp>
 
 RenderThread::RenderThread(GLFWwindow* window, bnb::interfaces::effect_player& ep)
     : m_window(window)
@@ -39,7 +39,13 @@ void RenderThread::thread_func()
 
     while (!m_cancellation_flag) {
         m_scheduler.run_all_tasks();
-        const bool need_swap{m_effect_player.draw() != -1};
+        
+        auto [status, processed_fd] = m_effect_player.frame_processor()->pop();
+        bool need_swap = false;
+        if (processed_fd) {
+            auto draw_result = m_effect_player.draw_with_external_frame_data(processed_fd);
+            need_swap = draw_result != -1;
+        }
 
         if (need_swap) {
 #if BNB_GL_BACKEND

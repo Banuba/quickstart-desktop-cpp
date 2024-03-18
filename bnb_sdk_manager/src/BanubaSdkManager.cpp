@@ -16,6 +16,7 @@ BanubaSdkManager::BanubaSdkManager(
         )
     ))
     , m_window_is_shown(false)
+    , m_config(bnb::interfaces::processor_configuration::create())
 {
     glfwSetWindowUserPointer(m_window.get_window(), this);
     // Window size changed
@@ -55,37 +56,49 @@ void BanubaSdkManager::load_effect(const std::string& effectPath, bool synchrono
     }
 }
 
-bnb::data_t BanubaSdkManager::process_image(const std::filesystem::path& path)
+std::optional<bnb::interfaces::pixel_buffer> BanubaSdkManager::process_image(const std::filesystem::path& path)
 {
-    return m_render_thread->schedule([this, path]() {
-                       //Process 1 pixel first
-                       uint8_t data[] = {0, 0, 0, 0 };
-                       bnb::image_format format;
-                       format.orientation = bnb::camera_orientation::deg_0;
-                       format.require_mirroring = false;
-                       format.width = 1;
-                       format.height = 1;
+    if(m_image_processor == nullptr){
+        m_image_processor = bnb::interfaces::frame_processor::create_photo_processor(m_config);
+    }
+    m_effect_player->set_frame_processor(m_image_processor);
+    
+    return m_render_thread->schedule([this, path]() -> std::optional<bnb::interfaces::pixel_buffer> {
 
-                       bnb::bpc8_image_t bpc_image(bnb::color_plane_weak(data), bnb::interfaces::pixel_format::rgba, format);
-                       bnb::full_image_t one_pixel(std::move(bpc_image));
+                    auto name = path.filename().string();
+                    auto img = bnb::full_image_t::load(path.string());
+                    auto fmt = img.get_format();
+        
+                    auto fd = bnb::interfaces::frame_data::create();
+                    fd->add_full_img(std::move(img));
+                    fd->add_frame_number(0);
+                    fd->add_timestamp_us(0);
 
-                       m_effect_player->process_image(
-                           std::move(one_pixel),
-                           bnb::interfaces::pixel_format::rgba);
+                    auto processor = m_effect_player->frame_processor();
+                    processor->push(fd);
+                    auto [status, processed_fd] = processor->pop();
+                    if (!processed_fd) {
+                        return std::nullopt;
+                    }
 
-                       auto name = path.filename().string();
-                       auto img = bnb::full_image_t::load(path.string());
-                       auto fmt = img.get_format();
-                       auto result_img = m_effect_player->process_image(
-                           std::move(img),
-                           bnb::interfaces::pixel_format::rgba);
-                       return result_img;
+                    auto draw_result = m_effect_player->draw_with_external_frame_data(processed_fd);
+                    if (draw_result < 0) {
+                        return std::nullopt;
+                    }
+        
+                    return m_effect_player->read_pixels();
+        
                    })
         .get();
 }
 
 void BanubaSdkManager::process_camera(int camera_id)
 {
+    if(m_realtime_processor == nullptr){
+        m_realtime_processor = bnb::interfaces::frame_processor::create_realtime_processor(bnb::interfaces::realtime_processor_mode::async, m_config);
+    }
+    
+    m_effect_player->set_frame_processor(m_realtime_processor);
     // Callback for new camera image
     auto ef_cb = [this](bnb::full_image_t image) {
         if (!m_window_is_shown) {
@@ -94,7 +107,14 @@ void BanubaSdkManager::process_camera(int camera_id)
             m_render_thread->update_surface_size(format.width, format.height);
             m_window_is_shown = true;
         }
-        m_effect_player->push_frame(std::move(image));
+        
+        static int64_t frame_number = 0;
+
+        auto fd = bnb::interfaces::frame_data::create();
+        fd->add_full_img(std::move(image));
+        fd->add_frame_number(frame_number++);
+        
+        m_realtime_processor->push(fd);
     };
     m_camera_ptr = bnb::create_camera_device(ef_cb, camera_id);
 }

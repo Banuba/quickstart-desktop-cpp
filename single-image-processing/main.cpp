@@ -29,8 +29,12 @@ int main()
         sdk.load_effect("effects/TrollGrandma", true);
         auto img = std::filesystem::path(BNB_RESOURCES_FOLDER) / "face720x1280.jpg";
         auto result = sdk.process_image(img);
+        if (!result) {
+            std::printf("Process_image: ERROR while processing.\n");
+            return;
+        }
 
-        auto writing_result = stbi_write_jpg(result_path.c_str(), 720, 1280, 4, result.data.get(), 90);
+        auto writing_result = stbi_write_jpg(result_path.c_str(), result->width, result->heigth, 4, result->data.data.get(), 90);
         assert(writing_result != 0);
     }
     std::printf("Processing result was written to `%s`. \n", result_path.c_str());

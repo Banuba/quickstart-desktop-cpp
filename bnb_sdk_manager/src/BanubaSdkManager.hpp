@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <optional>
 
 #include <bnb/utils/interfaces/all.hpp>
 #include <bnb/effect_player/interfaces/all.hpp>
@@ -33,7 +34,7 @@ public:
 
     void load_effect(const std::string& effectPath, bool synchronous);
 
-    bnb::data_t process_image(const std::filesystem::path& path);
+    std::optional<bnb::interfaces::pixel_buffer> process_image(const std::filesystem::path& path);
 
     void process_camera(int camera_id = 0);
 
@@ -45,5 +46,8 @@ private:
     std::shared_ptr<bnb::interfaces::effect_player> m_effect_player;
     std::shared_ptr<bnb::camera_base> m_camera_ptr;
     std::unique_ptr<RenderThread> m_render_thread;
+    bnb::interfaces::processor_configuration_sptr m_config;
+    bnb::interfaces::frame_processor_sptr m_realtime_processor;
+    bnb::interfaces::frame_processor_sptr m_image_processor;
     bool m_window_is_shown;
 };
