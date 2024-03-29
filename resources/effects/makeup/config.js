@@ -6,11 +6,15 @@ Object.assign(globalThis, makeup.m);
 /* Feel free to add your custom code below */
 
 function EnlargeEyes(strength){
-    FaceMesh.eyes(strength)
+    FaceMorph.eyes({enlargement: 0.5 * strength});
 }
 
 function FaceReshape(strength){
-    FaceMesh.face(strength);
+    FaceMorph.face({chin: -0.4 * strength});
+    FaceMorph.lips({height: 0.8 * strength});
+    FaceMorph.face({jaw_narrowing: 0.35 * strength, chin_narrowing: 0.35 * strength, narrowing: 0.25 * strength, cheekbones_narrowing: -0.5 * strength, forehead: 0.1 * strength});
+    FaceMorph.nose({width: 0.3 * strength, length: 0.2 * strength, tip_width: -0.4 * strength});
+    FaceMorph.lips({size: 0.3 * strength});
 }
 
 function LipsColor(color){
@@ -38,16 +42,18 @@ function TeethWhitening(strength){
 }
 
 function test(){
-    EnlargeEyes(2);
-    FaceReshape(2);
-    LipsColor("1 1 0 1");
-    SkinSmoothing(2);
-    BackgroundBlur(3);
-    Makeup.blushes("1 1 0 1");
-    Eyes.color("1 0 0 1");
-    BrowsColor("1 0 0 1");
-    BrowsImage(3);
-    TeethWhitening(1)   
+    EnlargeEyes(1.0);
+    FaceReshape(1.0);
+    LipsColor("0.898 0.431 0.663 0.9");
+    SkinSmoothing(1.0);
+    BackgroundBlur(0.55);
+    Makeup.blushes("0.871 0.365 0.514 0.5");
+    Eyes.color("0.082 0.412 0.780 0.5");
+    BrowsColor("0.004 0.004 0.004 0.4");
+    BrowsImage(0);
+    TeethWhitening(0.5);
+    Eyes.whitening(0.2);
+    Makeup.eyeshadow("0.322 0.341 0.435 0.5")
 }
 
 //BrowsImage(6)

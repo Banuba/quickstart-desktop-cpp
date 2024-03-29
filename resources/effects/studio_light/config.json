@@ -1,0 +1,140 @@
+{
+	"assets": {
+		"attachments": {
+			"bg_nn_blur":    { "type": "color", "format": "r8",    "clear": [ 0, 0, 0, 0 ], "load_state": "dont_care", "store_state": "save", "filtering" : "linear" },
+			"bg_nn_blur1":    { "type": "color", "format": "r8",    "clear": [ 0, 0, 0, 0 ], "load_state": "dont_care", "store_state": "save", "filtering" : "linear" },
+			"bg_nn_blur2":    { "type": "color", "format": "r8",    "clear": [ 0, 0, 0, 0 ], "load_state": "dont_care", "store_state": "save", "filtering" : "linear" },
+			"normalmap":      { "type": "color", "format": "rgba8", "clear": [ 0, 0, 0, 0 ], "load_state": "dont_care", "store_state": "save", "filtering" : "linear" },
+			"normalmap_z":    { "type": "depth",                    "clear": [ 1 ],          "load_state": "clear",     "store_state": "discard" },
+			"normalmap_blur": { "type": "color", "format": "rgba8", "clear": [ 0, 0, 0, 0 ], "load_state": "dont_care", "store_state": "save", "filtering" : "linear" },
+			"result":         { "type": "color", "format": "rgba8", "clear": [ 0, 0, 0, 0 ], "load_state": "dont_care", "store_state": "save" }
+		},
+		"images": {
+			"camera": { "type": "procedural_texture", "algorithm": "camera_composer" },
+			"bg_nn": { "recognizer_feature_name": "background", "active": true, "type": "segmentation_mask" },
+			"hair_nn": { "recognizer_feature_name": "hair", "active": true, "type": "segmentation_mask" },
+			"edge_mask": { "file_name": "edge_mask.png", "type": "texture" }
+		},
+		"materials": {
+			"bg_blur_down1": 
+			{
+				"path": "dual_filter_blur_downscale",
+				"samplers":  [ { "name": "s_downscale_tex", "image": "bg_nn" } ],
+				"state": { "blend": "off", "backfaces": true, "colorwrite": true, "ztest": false, "zwrite": false }
+			},
+			"bg_blur_down2": 
+			{
+				"path": "dual_filter_blur_downscale",
+				"samplers":  [ { "name": "s_downscale_tex", "image": "bg_nn_blur1" } ],
+				"state": { "blend": "off", "backfaces": true, "colorwrite": true, "ztest": false, "zwrite": false }
+			},
+			"bg_blur_up2": 
+			{
+				"path": "dual_filter_blur_upscale",
+				"samplers":  [ { "name": "s_upscale_tex", "image": "bg_nn_blur2" } ],
+				"state": { "blend": "off", "backfaces": true, "colorwrite": true, "ztest": false, "zwrite": false }
+			},
+			"bg_blur_up1": 
+			{
+				"path": "dual_filter_blur_upscale",
+				"samplers":  [ { "name": "s_upscale_tex", "image": "bg_nn_blur1" } ],
+				"state": { "blend": "off", "backfaces": true, "colorwrite": true, "ztest": false, "zwrite": false }
+			},
+			"bg_n": 
+			{
+				"samplers": 
+				[
+					{ "name": "camera", "image": "camera" },
+					{ "name": "bg_mask", "image": "bg_nn" },
+					{ "name": "bg_mask_blurred", "image": "bg_nn_blur" }
+				],
+				"state": { "blend": "off", "backfaces": true, "colorwrite": true, "ztest": false, "zwrite": false }
+			},
+			"face_n": {
+				"samplers": [ 
+					{ "name": "hair_mask", "image": "hair_nn" }, 
+					{ "name": "edge_mask", "image": "edge_mask" } 
+				],
+				"state": { "blend": "alpha", "backfaces": false, "colorwrite": true, "ztest": true, "zwrite": true }
+			},
+			"hblur": 
+			{
+				"samplers":  [ { "name": "tex_src", "image": "normalmap" } ],
+				"state": { "blend": "off", "backfaces": true, "colorwrite": true, "ztest": false, "zwrite": false }
+			},
+			"vblur": 
+			{
+				"samplers":  [ { "name": "tex_src", "image": "normalmap_blur" } ],
+				"state": { "blend": "off", "backfaces": true, "colorwrite": true, "ztest": false, "zwrite": false }
+			},
+			"studio_light": {
+				"samplers": [
+					{ "name": "camera", "image": "camera" },
+					{ "name": "normalmap", "image": "normalmap" }
+				],
+				"state": { "backfaces": true, "blend": "off", "colorwrite": true, "ztest": false, "zwrite": false },
+				"parameters": {
+					"ambient_multiplier": { "type": "vec4", "value": [ 0, 0, 0, 0 ] },
+					"light0_radiance":    { "type": "vec4", "value": [ 0, 0, 0, 0 ] },
+					"light1_radiance":    { "type": "vec4", "value": [ 0, 0, 0, 0 ] },
+					"light0_pos":         { "type": "vec4", "value": [ 0, 0, 0, 0 ] },
+					"light1_pos":         { "type": "vec4", "value": [ 0, 0, 0, 0 ] }
+				}
+			}
+		},
+		"faces": 
+		{ 
+			"face0": { "index": 0, "mesh": "!bnb_FACE" } 
+		},
+		"meshes": 
+		{
+			"fs_tri": "$builtin$meshes/fs_tri",
+			"!bnb_FACE": "$builtin$meshes/face.stream:0"
+		}
+	},
+	"components": {
+		"face_tracker:0": { "face": "face0", "type": "face_tracker" }
+	},
+	"entities": {
+		"face_tracker0": { "components": [ "face_tracker:0" ] },
+		"bg_blur_down1": { "components": { "mesh_instance" : { "mesh": "fs_tri", "materials": ["bg_blur_down1"] } }, "layer": "bg_blur_down1" },
+		"bg_blur_down2": { "components": { "mesh_instance" : { "mesh": "fs_tri", "materials": ["bg_blur_down2"] } }, "layer": "bg_blur_down2" },
+		"bg_blur_up2": { "components": { "mesh_instance" : { "mesh": "fs_tri", "materials": ["bg_blur_up2"] } }, "layer": "bg_blur_up2" },
+		"bg_blur_up1": { "components": { "mesh_instance" : { "mesh": "fs_tri", "materials": ["bg_blur_up1"] } }, "layer": "bg_blur_up1" },
+		"bg_n": { "components": { "mesh_instance" : { "mesh": "fs_tri", "materials": ["bg_n"] } }, "layer": "bg_n" },
+		"face_n": { "components": { "mesh_instance" : { "mesh": "!bnb_FACE", "materials": ["face_n"] } }, "layer": "face_n" },
+		"hblur": { "components": { "mesh_instance" : { "mesh": "fs_tri", "materials": ["hblur"] } }, "layer": "hblur" },
+		"vblur": { "components": { "mesh_instance" : { "mesh": "fs_tri", "materials": ["vblur"] } }, "layer": "vblur" },
+		"apply": { "components": { "mesh_instance" : { "mesh": "fs_tri", "materials": ["studio_light"] } }, "layer": "apply" }
+	},
+	"hierarchy": {
+		"face_tracker0": [ "face_n" ],
+		"root": [ "face_tracker0", "bg_n", "hblur", "vblur", "apply" ]
+	},
+	"render_list": {
+		"default": [
+			{ "layer": "bg_blur_down1", "render_target": "bg_nn_blur1" },
+			{ "layer": "bg_blur_down2", "render_target": "bg_nn_blur2" },
+			{ "layer": "bg_blur_up2", "render_target": "bg_nn_blur1" },
+			{ "layer": "bg_blur_up1", "render_target": "bg_nn_blur" },
+			{ "layer": "bg_n", "render_target": "normalmap" },
+			{ "layer": "face_n", "render_target": "normalmap" },
+			{ "layer": "hblur", "render_target": "normalmap_blur" },
+			{ "layer": "vblur", "render_target": "normalmap" },
+			{ "layer": "apply", "render_target": "result" }
+		]
+	},
+	"render_targets": {
+		"bg_nn_blur":    { "attachments": [ "bg_nn_blur" ], "width": 256, "height": 144 },
+		"bg_nn_blur1":    { "attachments": [ "bg_nn_blur1" ], "width": 128, "height": 72 },
+		"bg_nn_blur2":    { "attachments": [ "bg_nn_blur2" ], "width": 64, "height": 36 },
+		"normalmap":      { "attachments": [ "normalmap", "normalmap_z" ], "width": 0, "height": 480 },
+		"normalmap_blur": { "attachments": [ "normalmap_blur" ],           "width": 0, "height": 480 },
+		"result":         { "attachments": [ "result" ] }
+	},    
+	"script": {
+		"type": "latest",
+		"entry_point": "config.js"
+	},
+	"scene": "studio_light"
+}
