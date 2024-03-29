@@ -2,19 +2,68 @@
 
 ## Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba.com/face-ar-sdk-v1/desktop/desktop_overview) in C++ apps.  
 
-Current example runs makeup effect by default with options:
+Current example contains makeup and studio_light effects.
+
+By default it runs makeup effect with options:
+
 ```js
-    EnlargeEyes(2);
-    FaceReshape(2);
-    LipsColor("1 1 0 1");
-    SkinSmoothing(2);
-    BackgroundBlur(3);
-    Makeup.blushes("1 1 0 1");
-    Eyes.color("1 0 0 1");
-    BrowsColor("1 0 0 1");
-    BrowsImage(3);
-    TeethWhitening(1)  
+function EnlargeEyes(strength){
+    FaceMorph.eyes({enlargement: 0.5 * strength});
+}
+
+function FaceReshape(strength){
+    FaceMorph.face({chin: -0.4 * strength});
+    FaceMorph.lips({height: 0.8 * strength});
+    FaceMorph.face({jaw_narrowing: 0.35 * strength, chin_narrowing: 0.35 * strength, narrowing: 0.25 * strength, cheekbones_narrowing: -0.5 * strength, forehead: 0.1 * strength});
+    FaceMorph.nose({width: 0.3 * strength, length: 0.2 * strength, tip_width: -0.4 * strength});
+    FaceMorph.lips({size: 0.3 * strength});
+}
+
+function LipsColor(color){
+    Lips.color(color);
+}
+
+function SkinSmoothing(strength){
+   Skin.softening(strength);
+}
+
+function BackgroundBlur(strength){
+    Background.blur(strength);
+}
+
+function BrowsColor(color){
+    Brows.color(color);
+}
+
+function BrowsImage(num){
+    Brows.changeBrows(num)
+}
+
+function TeethWhitening(strength){
+    Teeth.whitening(strength);
+}
+
+EnlargeEyes(1.0);
+FaceReshape(1.0);
+LipsColor("0.898 0.431 0.663 0.9");
+SkinSmoothing(1.0);
+BackgroundBlur(0.55);
+Makeup.blushes("0.871 0.365 0.514 0.5");
+Eyes.color("0.082 0.412 0.780 0.5");
+BrowsColor("0.004 0.004 0.004 0.4");
+BrowsImage(0);
+TeethWhitening(0.5);
+Eyes.whitening(0.2);
+Makeup.eyeshadow("0.322 0.341 0.435 0.5")
 ```
+If you want to run studio_light effect:
+1) Go to `realtime-camera-preview/main.cpp`
+2) Change the line 19 on the code below:
+
+```cpp
+sdk.load_effect("effects/studio_light", true);
+```
+
 
 ## [Requirements](https://docs.banuba.com/face-ar-sdk-v1/overview/system_requirements)
 
