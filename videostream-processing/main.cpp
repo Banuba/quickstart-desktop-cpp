@@ -26,8 +26,11 @@ bnb::data_t get_pixel_data(const stbi::gif::frame& frame)
 
 int main()
 {
+    // Initialize BanubaSDK with token and paths to resources
     bnb::utility utility({bnb::sdk_resources_path(), BNB_RESOURCES_FOLDER}, BNB_CLIENT_TOKEN);
-    auto renderer = std::make_shared<glfw_renderer>();
+    // Create renderer based on bnb::player_api::interfaces::render_delegate
+    auto renderer = std::make_shared<GLFWRenderer>();
+    // Create render target
     auto render_target = bnb::player_api::opengl_render_target::create();
     // Create player
     auto player = bnb::player_api::player::create(30, render_target, renderer);
@@ -40,7 +43,7 @@ int main()
     player->load_async("effects/TrollGrandma");
     
     std::atomic<bool> quit{false};
-    // Emulates video stream processing with gif file
+    // Emulates video stream processing with gif file from another thread
     auto gif_thread = std::thread([&quit, input](){
         stbi::gif gif(std::filesystem::path(BNB_RESOURCES_FOLDER) / "face600x600.gif");
         gif.rewind();
@@ -72,13 +75,11 @@ int main()
     });
     
     // Setup callbacks for glfw window
-    renderer->get_window()->set_glfw_events_callback([window_output, &quit](const glfw_event& e) {
-        if (e.type == glfw_event_t::framebuffer_resize) {
-            window_output->set_frame_layout(0, 0, e.size_width, e.size_height);
-        }
-        if(e.type == glfw_event_t::window_close){
-            quit = true;
-        }
+    // resize and on quit
+    renderer->get_window()->set_callbacks([window_output](uint32_t w, uint32_t h){
+        window_output->set_frame_layout(0, 0, w, h);
+    }, [&quit](){
+        quit = true;
     });
     
     // Run main loop

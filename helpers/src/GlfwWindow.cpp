@@ -54,69 +54,9 @@ namespace
         h = static_cast<int32_t>(scaled_h);
     }
 
-    glfw_event construct_event(glfw_event_t t, GLFWwindow* w)
-    {
-        glfw_event e;
-        e.type = t;
-        e.window = w;
-        e.pos_x = e.pos_y = e.keyboard_mods = 0;
-        return e;
-    }
-
-    glfw_event construct_event(glfw_event_t t, GLFWwindow* w, double a, double b)
-    {
-        glfw_event e;
-        e.type = t;
-        e.window = w;
-        e.scroll_x = a;
-        e.scroll_y = b;
-        e.keyboard_mods = 0;
-        return e;
-    }
-
-    glfw_event construct_event(glfw_event_t t, GLFWwindow* w, const char** a, int32_t b)
-    {
-        glfw_event e;
-        e.type = t;
-        e.window = w;
-        e.file_paths = a;
-        e.file_count = b;
-        e.keyboard_mods = 0;
-        return e;
-    }
-
-    glfw_event construct_event(glfw_event_t t, GLFWwindow* w, int32_t a, int32_t b, int32_t c = 0)
-    {
-        glfw_event e;
-        e.type = t;
-        e.window = w;
-        e.pos_x = a;
-        e.pos_y = b;
-        e.keyboard_mods = c;
-        return e;
-    }
-
-    glfw_event construct_event(glfw_event_t t, GLFWwindow* w, uint32_t a)
-    {
-        glfw_event e;
-        e.type = t;
-        e.window = w;
-        e.codepoint = a;
-        e.pos_y = e.keyboard_mods = 0;
-        return e;
-    }
-
-    void send_event(const glfw_event& e)
-    {
-        auto* cb_raw_ptr = glfwGetWindowUserPointer(e.window);
-        if (cb_raw_ptr) {
-            (*reinterpret_cast<glfw_window::glfw_event_callback*>(cb_raw_ptr))(e);
-        }
-    }
-
 } /* namespace */
 
-glfw_window::glfw_window(const std::string_view& title)
+GlfwWindow::GlfwWindow(const std::string_view& title)
 {
     // Init glfw for glfw_window
     if (!glfwInit()) {
@@ -151,46 +91,38 @@ glfw_window::glfw_window(const std::string_view& title)
     glfwSwapInterval(0);
 
     glfwMakeContextCurrent(nullptr);
+    
+    track_events();
 }
 
-glfw_window::~glfw_window()
+GlfwWindow::~GlfwWindow()
 {
     glfwMakeContextCurrent(nullptr);
     glfwDestroyWindow(m_window);
     glfwTerminate();
+    untrack_events();
 }
 
 /* glfw_window::make_context_current */
-void glfw_window::make_context_current()
+void GlfwWindow::make_context_current()
 {
     glfwMakeContextCurrent(m_window);
 }
 
 /* glfw_window::make_nothing_current */
-void glfw_window::make_nothing_current()
+void GlfwWindow::make_nothing_current()
 {
     glfwMakeContextCurrent(nullptr);
 }
 
 /* glfw_window::swap_buffers */
-void glfw_window::swap_buffers()
+void GlfwWindow::swap_buffers()
 {
     glfwSwapBuffers(m_window);
 }
 
-/* glfw_window::set_glfw_events_callback */
-void glfw_window::set_glfw_events_callback(glfw_event_callback callback)
-{
-    m_glfw_event_callback = callback;
-    if (callback == nullptr) {
-        untrack_events();
-    } else {
-        track_events();
-    }
-}
-
 /* glfw_window::show_window_and_run_events_loop */
-void glfw_window::show_window_and_run_events_loop()
+void GlfwWindow::show_window_and_run_events_loop()
 {
     int32_t x, y, w, h;
     calculate_window_size_and_pos(x, y, w, h);
@@ -204,30 +136,29 @@ void glfw_window::show_window_and_run_events_loop()
 }
 
 /* glfw_window::track_events */
-void glfw_window::track_events()
+void GlfwWindow::track_events()
 {
-    glfwSetWindowUserPointer(m_window, reinterpret_cast<void*>(&m_glfw_event_callback));
-
-    using t = glfw_event_t;
-    glfwSetWindowPosCallback(m_window, [](GLFWwindow* window, int x, int y) {
-        send_event(construct_event(t::window_move, window, x, y));
-    });
-    glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
-        send_event(construct_event(t::window_resize, window, width, height));
-    });
+    glfwSetWindowUserPointer(m_window, reinterpret_cast<void*>(this));
     glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
-        send_event(construct_event(t::window_close, window));
+        if(auto ptr = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(window))){
+            if(ptr->m_close_callback){
+                ptr->m_close_callback();
+            }
+        }
     });
+    
     glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
-        send_event(construct_event(t::framebuffer_resize, window, width, height));
+        if(auto ptr = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(window))){
+            if(ptr->m_resize_callback){
+                ptr->m_resize_callback(width, height);
+            }
+        }
     });
 }
 
-/* glfw_window::untrack_events */
-void glfw_window::untrack_events()
+void GlfwWindow::untrack_events()
 {
     glfwSetWindowUserPointer(m_window, nullptr);
-    glfwSetWindowSizeCallback(m_window, nullptr);
     glfwSetWindowCloseCallback(m_window, nullptr);
     glfwSetFramebufferSizeCallback(m_window, nullptr);
 }

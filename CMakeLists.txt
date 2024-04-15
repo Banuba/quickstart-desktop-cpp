@@ -37,7 +37,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/cmake/copy_libs.cmake)
 #
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/bnb_sdk)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/bnb_sdk_manager)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/helpers)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/third/glfw)

@@ -24,8 +24,11 @@ int main()
     const auto result_path = (std::filesystem::current_path() / "bnb_result.jpg").string();
     #endif
     
+    // Initialize BanubaSDK with token and paths to resources
     bnb::utility utility({bnb::sdk_resources_path(), BNB_RESOURCES_FOLDER}, BNB_CLIENT_TOKEN);
-    auto renderer = std::make_shared<glfw_renderer>();
+    // Create renderer based on bnb::player_api::interfaces::render_delegate
+    auto renderer = std::make_shared<GLFWRenderer>();
+    // Create render target
     auto render_target = bnb::player_api::opengl_render_target::create();
     // Create player
     auto player = bnb::player_api::player::create(30, render_target, renderer);
