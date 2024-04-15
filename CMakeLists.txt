@@ -19,6 +19,8 @@ if(APPLE)
 else()
     set(BNB_GL_BACKEND ON)
 endif()
+#TODO: metal
+set(BNB_GL_BACKEND ON)
 
 add_definitions(
     -DBNB_RESOURCES_FOLDER="${BNB_RESOURCES_FOLDER}"
@@ -36,6 +38,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/cmake/copy_libs.cmake)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/bnb_sdk)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/bnb_sdk_manager)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/helpers)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/third/glfw)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/third/asyncplusplus)
@@ -49,3 +52,4 @@ option(DEPLOY_BUILD "Build for deployment" OFF)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/realtime-camera-preview)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/single-image-processing)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/videostream-processing)

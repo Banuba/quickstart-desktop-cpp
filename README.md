@@ -20,7 +20,7 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
 1. Clone the repository with submodules.
 2. Copy `bnb_sdk.tar.gz/mac` (for Mac OS) or `bnb_sdk.zip/bin` with `bnb_sdk.zip/include` (for Windows) into `quickstart-desktop-cpp/bnb_sdk` dir.
 3. Windows only: copy **contents** of `bnb_sdk.zip/resources` into `quickstart-desktop-cpp/resources`.
-4. Copy and Paste your client token into appropriate section of [`quickstart-desktop-cpp/bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/src/BanubaClientToken.hpp). 
+4. Copy and Paste your client token into appropriate section of [`quickstart-desktop-cpp/helpers/src/BanubaClientToken.hpp`](helpers/src/BanubaClientToken.hpp). 
 5. Generate project files by executing next commands:
     ##### Windows x86 build:	
     ```
@@ -47,7 +47,7 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
         cmake -G Xcode ..
     ```
 6. Previous step will generate Xcode project for MacOS and Visual Studio project for Windows. Open project in appropriate IDE on your platform.
-7. Select target `single-image-processingr` or `realtime-camera-preview`.
+7. Select target `single-image-processing`, `realtime-camera-preview` or `videostream-processing`.
 8. Run build.
 
 ### Docs
