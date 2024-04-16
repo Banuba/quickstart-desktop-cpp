@@ -28,7 +28,7 @@ int main()
 {
     // Initialize BanubaSDK with token and paths to resources
     bnb::utility utility({bnb::sdk_resources_path(), BNB_RESOURCES_FOLDER}, BNB_CLIENT_TOKEN);
-    // Create renderer based on bnb::player_api::interfaces::render_delegate
+    // Create render delegate based on GLFW
     auto renderer = std::make_shared<GLFWRenderer>();
     // Create render target
     auto render_target = bnb::player_api::opengl_render_target::create();
@@ -75,7 +75,7 @@ int main()
     });
     
     // Setup callbacks for glfw window
-    // resize and on quit
+    // resize and on-quit events
     renderer->get_window()->set_callbacks([window_output](uint32_t w, uint32_t h){
         window_output->set_frame_layout(0, 0, w, h);
     }, [&quit](){

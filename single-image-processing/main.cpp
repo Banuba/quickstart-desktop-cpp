@@ -26,7 +26,7 @@ int main()
     
     // Initialize BanubaSDK with token and paths to resources
     bnb::utility utility({bnb::sdk_resources_path(), BNB_RESOURCES_FOLDER}, BNB_CLIENT_TOKEN);
-    // Create renderer based on bnb::player_api::interfaces::render_delegate
+    // Create render delegate based on GLFW
     auto renderer = std::make_shared<GLFWRenderer>();
     // Create render target
     auto render_target = bnb::player_api::opengl_render_target::create();
