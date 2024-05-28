@@ -17,12 +17,15 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
 
 ### Getting Started
 
+#### Windows
+
 1. Clone the repository with submodules.
-2. Copy `bnb_sdk.tar.gz/mac` (for Mac OS) or `bnb_sdk.zip/bin` with `bnb_sdk.zip/include` (for Windows) into `quickstart-desktop-cpp/bnb_sdk` dir.
-3. Windows only: copy **contents** of `bnb_sdk.zip/resources` into `quickstart-desktop-cpp/resources`.
+2. Copy `bnb_sdk.zip/bin` with `bnb_sdk.zip/include` into `quickstart-desktop-cpp/bnb_sdk` dir.
+3. Copy **contents** of `bnb_sdk.zip/resources` into `quickstart-desktop-cpp/resources`.
 4. Copy and Paste your client token into appropriate section of [`quickstart-desktop-cpp/bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/src/BanubaClientToken.hpp). 
 5. Generate project files by executing next commands:
-    ##### Windows x86 build:	
+
+    **Windows x86 build:**	
     ```
         cd %path_to_repository%
         git submodule update --init --recursive
@@ -30,7 +33,7 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
         cd build
         cmake -A Win32 ..
     ```
-    ##### Windows x64 build:	
+    **Windows x64 build:**	
     ```
         cd %path_to_repository%
         git submodule update --init --recursive
@@ -38,7 +41,16 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
         cd build
         cmake -A x64 ..
     ```
-    ##### MacOS build:	
+6. Previous step will generate Visual Studio project for Windows. Open project in IDE.
+7. Select target `single-image-processingr` or `realtime-camera-preview`.
+8. Run build.
+
+#### macOS
+
+1. Clone the repository with submodules.
+2. Copy `bnb_sdk.tar.gz/mac` into `quickstart-desktop-cpp/bnb_sdk` dir.
+3. Copy and Paste your client token into appropriate section of [`quickstart-desktop-cpp/bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/src/BanubaClientToken.hpp). 
+4. Generate project files by executing next commands:
     ```
         cd %path_to_repository%
         git submodule update --init --recursive
@@ -46,9 +58,9 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
         cd build
         cmake -G Xcode ..
     ```
-6. Previous step will generate Xcode project for MacOS and Visual Studio project for Windows. Open project in appropriate IDE on your platform.
-7. Select target `single-image-processingr` or `realtime-camera-preview`.
-8. Run build.
+5. Previous step will generate Xcode project. Open project IDE.
+6. Select target `single-image-processingr` or `realtime-camera-preview`.
+7. Run build.
 
 ### Docs
 You can find more info [here](https://docs.banuba.com/face-ar-sdk-v1/desktop/desktop_overview).
