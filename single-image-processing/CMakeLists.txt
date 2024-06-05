@@ -3,7 +3,7 @@ add_executable(single-image-processing
 )
 
 target_link_libraries(single-image-processing
-    bnb_sdk_manager
+    helpers
 )
 
 if (APPLE)

@@ -3,7 +3,7 @@ add_executable(realtime-camera-preview
 )
 
 target_link_libraries(realtime-camera-preview
-    bnb_sdk_manager
+    helpers
 )
 
 if (APPLE)

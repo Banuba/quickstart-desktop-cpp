@@ -1,0 +1,43 @@
+#pragma once
+
+#include <GLFW/glfw3.h>
+
+#include <cstdint>
+#include <functional>
+
+class GlfwWindow
+{
+public:
+    using resize_callback = std::function<void(uint32_t, uint32_t)>;
+    using close_callback = std::function<void()>;
+
+public:
+    GlfwWindow(const std::string_view& title);
+    ~GlfwWindow();
+
+    void make_context_current();
+    void make_nothing_current();
+    void swap_buffers();
+
+    void show_window_and_run_events_loop();
+
+    [[nodiscard]] GLFWwindow* get_window() const
+    {
+        return m_window;
+    }
+    
+    void set_callbacks(resize_callback resize, close_callback close){
+        m_resize_callback = std::move(resize);
+        m_close_callback = std::move(close);
+    }
+
+private:
+    void track_events();
+    void untrack_events();
+
+private:
+    GLFWwindow* m_window{nullptr};
+    resize_callback m_resize_callback;
+    close_callback m_close_callback;
+}; /* class glfw_window */
+
