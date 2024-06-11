@@ -64,6 +64,14 @@ If you want to run studio_light effect:
 sdk.load_effect("effects/studio_light", true);
 ```
 
+If you want to run DebugWireframe effect:
+1) Go to `realtime-camera-preview/main.cpp`
+2) Change the line 19 on the code below:
+
+```cpp
+sdk.load_effect("effects/DebugWireframe", true);
+```
+
 
 ## [Requirements](https://docs.banuba.com/face-ar-sdk-v1/overview/system_requirements)
 
