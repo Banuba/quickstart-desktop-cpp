@@ -45,7 +45,10 @@ int main()
     // Create camera device input with callback
     // that is called when new frames are received.
     auto camera = bnb::create_camera_device([input](bnb::full_image_t image) {
-        input->push(image);
+        auto now_us = std::chrono::duration_cast<std::chrono::microseconds>(
+            std::chrono::high_resolution_clock::now().time_since_epoch()
+        ).count();
+        input->push(image, now_us);
     }, 0);
     
     // Setup callbacks for glfw window
