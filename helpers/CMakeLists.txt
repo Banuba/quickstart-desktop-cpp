@@ -20,7 +20,6 @@ add_library(helpers STATIC
 )
 
 target_link_libraries(helpers
-    Async++
     glfw
     stb
     bnb_effect_player
