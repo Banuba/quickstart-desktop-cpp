@@ -9,6 +9,7 @@
 #include <bnb/player_api/interfaces/input.hpp>
 #include <bnb/player_api/interfaces/output/window_output.hpp>
 #include <bnb/player_api/interfaces/render_target/opengl_render_target.hpp>
+#include <bnb/player_api/interfaces/render_target/metal_render_target.hpp>
 
 #include <stb_gif.hpp>
 
@@ -17,6 +18,13 @@
 #include <chrono>
 #include <atomic>
 #include <mutex>
+
+using namespace bnb::interfaces;
+
+namespace
+{
+    render_backend_type render_backend = render_backend_type::opengl;
+}
 
 
 // Custom input for gif file
@@ -109,15 +117,20 @@ int main()
     // Initialize BanubaSDK with token and paths to resources
     bnb::utility utility({bnb::sdk_resources_path(), BNB_RESOURCES_FOLDER}, BNB_CLIENT_TOKEN);
     // Create render delegate based on GLFW
-    auto renderer = std::make_shared<GLFWRenderer>();
+    auto renderer = std::make_shared<GLFWRenderer>(render_backend);
     // Create render target
-    auto render_target = bnb::player_api::opengl_render_target::create();
+    bnb::player_api::render_target_sptr render_target;
+    if (render_backend == render_backend_type::opengl) {
+        render_target = bnb::player_api::opengl_render_target::create();
+    } else if (render_backend == render_backend_type::metal) {
+        render_target = bnb::player_api::metal_render_target::create();
+    }
     // Create player
     auto player = bnb::player_api::player::create(30, render_target, renderer);
     // Create custom input for gif
     auto input = std::make_shared<gif_stream_input>(std::filesystem::path(BNB_RESOURCES_FOLDER) / "face600x600.gif");
     // on-screen output
-    auto window_output = bnb::player_api::window_output::create();
+    auto window_output = bnb::player_api::window_output::create(renderer->get_native_surface());
     
     player->use(input).use(window_output);
     player->load_async("effects/TrollGrandma");

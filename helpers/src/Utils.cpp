@@ -1,6 +1,8 @@
 #include "Utils.hpp"
 
-#if BNB_OS_WINDOWS || BNB_OS_LINUX // See BanubaSdkManager.mm for OSX
+#include <bnb/utils/defs.hpp>
+
+#if !BNB_APPLE // See Utils.mm for MacOS
 std::string bnb::sdk_resources_path() {
     return ".";
 }

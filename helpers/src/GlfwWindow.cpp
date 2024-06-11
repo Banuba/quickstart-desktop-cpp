@@ -7,6 +7,8 @@
 #include <bnb/effect_player/utility.hpp>
 #include <stdexcept>
 
+using bnb::interfaces::render_backend_type;
+
 namespace
 {
 
@@ -56,42 +58,48 @@ namespace
 
 } /* namespace */
 
-GlfwWindow::GlfwWindow(const std::string_view& title)
+GlfwWindow::GlfwWindow(const std::string_view& title, render_backend_type render_backend)
+    : m_render_backend(render_backend)
 {
     // Init glfw for glfw_window
     if (!glfwInit()) {
         throw std::runtime_error("glfwInit() error");
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    glfwWindowHint(GLFW_RED_BITS, 8);
-    glfwWindowHint(GLFW_GREEN_BITS, 8);
-    glfwWindowHint(GLFW_BLUE_BITS, 8);
-    glfwWindowHint(GLFW_ALPHA_BITS, 8);
-    glfwWindowHint(GLFW_STENCIL_BITS, 8);
-    glfwWindowHint(GLFW_DEPTH_BITS, 24);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+
+    if (m_render_backend == render_backend_type::opengl) {
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+        glfwWindowHint(GLFW_RED_BITS, 8);
+        glfwWindowHint(GLFW_GREEN_BITS, 8);
+        glfwWindowHint(GLFW_BLUE_BITS, 8);
+        glfwWindowHint(GLFW_ALPHA_BITS, 8);
+        glfwWindowHint(GLFW_STENCIL_BITS, 8);
+        glfwWindowHint(GLFW_DEPTH_BITS, 24);
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+    } else {
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    }
 
     if ((m_window = glfwCreateWindow(1280, 720, title.data(), nullptr, nullptr)) == nullptr) {
         throw std::runtime_error("glfwCreateWindow() error");
     }
 
-    glfwMakeContextCurrent(m_window);
-
-    bnb::utility::load_gl_functions();
+    if (m_render_backend == render_backend_type::opengl) {
+        glfwMakeContextCurrent(m_window);
+        bnb::utility::load_gl_functions();
+        glfwMakeContextCurrent(nullptr);
+    }
 
     glfwSetErrorCallback(glfw_error_callback);
     glfwSwapInterval(0);
 
-    glfwMakeContextCurrent(nullptr);
-    
     track_events();
 }
 
@@ -106,19 +114,25 @@ GlfwWindow::~GlfwWindow()
 /* glfw_window::make_context_current */
 void GlfwWindow::make_context_current()
 {
-    glfwMakeContextCurrent(m_window);
+    if (m_render_backend == render_backend_type::opengl) {
+        glfwMakeContextCurrent(m_window);
+    }
 }
 
 /* glfw_window::make_nothing_current */
 void GlfwWindow::make_nothing_current()
 {
-    glfwMakeContextCurrent(nullptr);
+    if (m_render_backend == render_backend_type::opengl) {
+        glfwMakeContextCurrent(nullptr);
+    }
 }
 
 /* glfw_window::swap_buffers */
 void GlfwWindow::swap_buffers()
 {
-    glfwSwapBuffers(m_window);
+    if (m_render_backend == render_backend_type::opengl) {
+        glfwSwapBuffers(m_window);
+    }
 }
 
 /* glfw_window::show_window_and_run_events_loop */

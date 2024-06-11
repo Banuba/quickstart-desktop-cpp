@@ -1,5 +1,6 @@
 #pragma once
 
+#include <bnb/scene/interfaces/render_backend_type.hpp>
 #include <GLFW/glfw3.h>
 
 #include <cstdint>
@@ -12,7 +13,7 @@ public:
     using close_callback = std::function<void()>;
 
 public:
-    GlfwWindow(const std::string_view& title);
+    GlfwWindow(const std::string_view& title, bnb::interfaces::render_backend_type render_backend);
     ~GlfwWindow();
 
     void make_context_current();
@@ -39,5 +40,6 @@ private:
     GLFWwindow* m_window{nullptr};
     resize_callback m_resize_callback;
     close_callback m_close_callback;
+    bnb::interfaces::render_backend_type m_render_backend;
 }; /* class glfw_window */
 

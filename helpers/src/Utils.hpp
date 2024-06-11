@@ -1,8 +1,9 @@
 #pragma once
+
 #include <string>
 
-
-namespace bnb {
+namespace bnb
+{
     std::string sdk_resources_path();
 }
 

@@ -8,6 +8,7 @@
 #include <bnb/player_api/interfaces/input/photo_input.hpp>
 #include <bnb/player_api/interfaces/output/opengl_frame_output.hpp>
 #include <bnb/player_api/interfaces/render_target/opengl_render_target.hpp>
+#include <bnb/player_api/interfaces/render_target/metal_render_target.hpp>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
@@ -15,6 +16,10 @@
 
 using namespace bnb::interfaces;
 
+namespace
+{
+    render_backend_type render_backend = render_backend_type::opengl;
+}
 
 int main()
 {
@@ -27,7 +32,7 @@ int main()
     // Initialize BanubaSDK with token and paths to resources
     bnb::utility utility({bnb::sdk_resources_path(), BNB_RESOURCES_FOLDER}, BNB_CLIENT_TOKEN);
     // Create render delegate based on GLFW
-    auto renderer = std::make_shared<GLFWRenderer>();
+    auto renderer = std::make_shared<GLFWRenderer>(render_backend);
     // Create render target
     auto render_target = bnb::player_api::opengl_render_target::create();
     // Create player
