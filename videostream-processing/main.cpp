@@ -128,7 +128,7 @@ int main()
     // Create player
     auto player = bnb::player_api::player::create(30, render_target, renderer);
     // Create custom input for gif
-    auto input = std::make_shared<gif_stream_input>(std::filesystem::path(BNB_RESOURCES_FOLDER) / "face600x600.gif");
+    auto input = std::make_shared<gif_stream_input>((std::filesystem::path(BNB_RESOURCES_FOLDER) / "face600x600.gif").string());
     // on-screen output
     auto window_output = bnb::player_api::window_output::create(renderer->get_native_surface());
     
