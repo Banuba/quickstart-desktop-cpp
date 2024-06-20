@@ -39,7 +39,7 @@ int main()
     auto player = bnb::player_api::player::create(30, render_target, renderer);
     // Create texture input and load it
     auto input = bnb::player_api::photo_input::create();
-    input->load(std::filesystem::path(BNB_RESOURCES_FOLDER) / "face720x1280.jpg");
+    input->load((std::filesystem::path(BNB_RESOURCES_FOLDER) / "face720x1280.jpg").string());
     // Create frame output with callback t
     // that is called when frames are received and saves it to a file.
     auto frame_output = bnb::player_api::opengl_frame_output::create([player, result_path](const bnb::full_image_t& pb) {

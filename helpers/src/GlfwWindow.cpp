@@ -91,13 +91,13 @@ GlfwWindow::GlfwWindow(const std::string_view& title, render_backend_type render
         throw std::runtime_error("glfwCreateWindow() error");
     }
 
+    glfwSetErrorCallback(glfw_error_callback);
+
     if (m_render_backend == render_backend_type::opengl) {
         glfwMakeContextCurrent(m_window);
         bnb::utility::load_gl_functions();
-        glfwMakeContextCurrent(nullptr);
     }
 
-    glfwSetErrorCallback(glfw_error_callback);
     glfwSwapInterval(0);
 
     track_events();
@@ -105,10 +105,10 @@ GlfwWindow::GlfwWindow(const std::string_view& title, render_backend_type render
 
 GlfwWindow::~GlfwWindow()
 {
+    untrack_events();
     glfwMakeContextCurrent(nullptr);
     glfwDestroyWindow(m_window);
     glfwTerminate();
-    untrack_events();
 }
 
 /* glfw_window::make_context_current */

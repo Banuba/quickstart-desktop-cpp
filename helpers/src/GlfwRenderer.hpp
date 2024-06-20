@@ -44,7 +44,6 @@ public:
         if (frame_number != -1) {
             m_window->swap_buffers();
         }
-        m_window->make_nothing_current();
     }
 
 private:

@@ -8,7 +8,7 @@ else()
         set(BNB_SDK_ARCH "bin/x86")
     endif()
     set(SDK_FILE_TYPE "lib")
-    set(SDK_EFFECT_PLAYER_LIB "bnb_effect_player")
+    set(SDK_EFFECT_PLAYER_LIB "bnb_player_api")
 endif()
 
 set(SDK_COMMON_FOLDER ${CMAKE_CURRENT_LIST_DIR}/${BNB_SDK_ARCH})
