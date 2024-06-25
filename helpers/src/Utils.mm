@@ -1,6 +1,5 @@
 #include "Utils.hpp"
 
-
 #import <Foundation/Foundation.h>
 
 std::string bnb::sdk_resources_path()

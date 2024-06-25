@@ -11,7 +11,7 @@ set(HELPERS_SOURCES
 if(APPLE)
     list(APPEND HELPERS_SOURCES
         src/Utils.mm
-        #src/GlfwWindow.mm
+        src/GlfwRenderer.mm
     )
 endif()
 
@@ -20,7 +20,6 @@ add_library(helpers STATIC
 )
 
 target_link_libraries(helpers
-    Async++
     glfw
     stb
     bnb_effect_player

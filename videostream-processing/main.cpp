@@ -9,6 +9,7 @@
 #include <bnb/player_api/interfaces/input.hpp>
 #include <bnb/player_api/interfaces/output/window_output.hpp>
 #include <bnb/player_api/interfaces/render_target/opengl_render_target.hpp>
+#include <bnb/player_api/interfaces/render_target/metal_render_target.hpp>
 
 #include <stb_gif.hpp>
 
@@ -17,6 +18,13 @@
 #include <chrono>
 #include <atomic>
 #include <mutex>
+
+using namespace bnb::interfaces;
+
+namespace
+{
+    render_backend_type render_backend = render_backend_type::opengl;
+}
 
 
 // Custom input for gif file
@@ -38,7 +46,11 @@ public:
             format.orientation = bnb::camera_orientation::deg_0;
             
             while (!m_quit) {
-                if(!m_gif.jump_to_next_frame()){ // End of file
+                if (!m_play) {
+                    std::this_thread::yield();
+                    continue;
+                }
+                if (!m_gif.jump_to_next_frame()){ // End of file
                     m_gif.rewind();
                     std::this_thread::yield();
                     continue;
@@ -66,6 +78,7 @@ public:
     }
     ~gif_stream_input()
     {
+        m_quit = true;
         m_thread.join();
     }
     
@@ -79,10 +92,15 @@ public:
         std::lock_guard<std::mutex> lock(m_mutex);
         return m_timestamp_us;
     }
-    
-    void on_quit()
+
+    void play()
     {
-        m_quit = true;
+        m_play = true;
+    }
+    
+    void stop()
+    {
+        m_play = false;
     }
     
 private:
@@ -98,6 +116,7 @@ private:
     uint64_t m_timestamp_us{0};
     bnb::player_api::frame_processor_sptr m_frame_processor{nullptr};
     std::atomic<bool> m_quit{false};
+    std::atomic<bool> m_play{false};
     std::thread m_thread;
     stbi::gif m_gif;
     mutable std::mutex m_mutex;
@@ -109,25 +128,31 @@ int main()
     // Initialize BanubaSDK with token and paths to resources
     bnb::utility utility({bnb::sdk_resources_path(), BNB_RESOURCES_FOLDER}, BNB_CLIENT_TOKEN);
     // Create render delegate based on GLFW
-    auto renderer = std::make_shared<GLFWRenderer>();
+    auto renderer = std::make_shared<GLFWRenderer>(render_backend);
     // Create render target
-    auto render_target = bnb::player_api::opengl_render_target::create();
+    bnb::player_api::render_target_sptr render_target;
+    if (render_backend == render_backend_type::opengl) {
+        render_target = bnb::player_api::opengl_render_target::create();
+    } else if (render_backend == render_backend_type::metal) {
+        render_target = bnb::player_api::metal_render_target::create();
+    }
     // Create player
     auto player = bnb::player_api::player::create(30, render_target, renderer);
     // Create custom input for gif
-    auto input = std::make_shared<gif_stream_input>(std::filesystem::path(BNB_RESOURCES_FOLDER) / "face600x600.gif");
+    auto input = std::make_shared<gif_stream_input>((std::filesystem::path(BNB_RESOURCES_FOLDER) / "face600x600.gif").string());
     // on-screen output
-    auto window_output = bnb::player_api::window_output::create();
+    auto window_output = bnb::player_api::window_output::create(renderer->get_native_surface());
     
     player->use(input).use(window_output);
     player->load_async("effects/TrollGrandma");
+    input->play();
     
     // Setup callbacks for glfw window
     // resize and on-quit events
     renderer->get_window()->set_callbacks([window_output](uint32_t w, uint32_t h){
         window_output->set_frame_layout(0, 0, w, h);
     }, [input](){
-        input->on_quit();
+        input->stop();
     });
     
     // Run main loop
