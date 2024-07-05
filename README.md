@@ -49,7 +49,7 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
 
 1. Clone the repository with submodules.
 2. Copy `bnb_sdk.tar.gz/mac` into `quickstart-desktop-cpp/bnb_sdk` dir.
-3. Copy and Paste your client token into appropriate section of [`quickstart-desktop-cpp/bnb_sdk_manager/BanubaClientToken.hpp`](bnb_sdk_manager/src/BanubaClientToken.hpp). 
+3. Copy and Paste your client token into appropriate section of [`quickstart-desktop-cpp/helpers/src/BanubaClientToken.hpp`](helpers/src/BanubaClientToken.hpp). 
 4. Generate project files by executing next commands:
     ```
         cd %path_to_repository%
@@ -63,4 +63,4 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
 8. Run build.
 
 ### Docs
-You can find more info [here](https://docs.banuba.com/face-ar-sdk-v1/desktop/desktop_overview).
+You can find more info [here](https://docs.banuba.com/far-sdk/tutorials/development/basic_integration?platform=desktop).
