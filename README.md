@@ -1,8 +1,8 @@
-[![](https://www.banuba.com/hubfs/Banuba_November2018/Images/Banuba%20SDK.png)](https://docs.banuba.com/face-ar-sdk-v1/desktop/desktop_overview)
+[![](https://www.banuba.com/hubfs/Banuba_November2018/Images/Banuba%20SDK.png)](https://docs.banuba.com/far-sdk/tutorials/development/basic_integration?platform=desktop)
 
-## Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba.com/face-ar-sdk-v1/desktop/desktop_overview) in C++ apps.  
+## Quick start examples for integrating [Banuba SDK on Desktop](https://docs.banuba.com/far-sdk/tutorials/development/basic_integration?platform=desktop) in C++ apps.  
 
-## [Requirements](https://docs.banuba.com/face-ar-sdk-v1/overview/system_requirements)
+## [Requirements](hhttps://docs.banuba.com/far-sdk/tutorials/capabilities/system_requirements)
 
 ## Usage
 ### Token
@@ -10,7 +10,7 @@ Before you commit to a license, you are free to test all the features of the SDK
 We will get back to you with the trial token.
 You can store the token within the app.  
 
-Feel free to [contact us](https://docs.banuba.com/face-ar-sdk-v1/support) if you have any questions.
+Feel free to [contact us](https://docs.banuba.com/far-sdk/support) if you have any questions.
 
 ### Banuba SDK Build
 To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceAR-SDK-desktop-releases/releases) section in the [FaceAR-SDK-desktop-releases](https://github.com/Banuba/FaceAR-SDK-desktop-releases) repository.
