@@ -1,6 +1,9 @@
 #pragma once
 
 #include <bnb/scene/interfaces/render_backend_type.hpp>
+// For v1.17+
+//#include <bnb/types/interfaces/render_backend_type.hpp>
+
 #include <GLFW/glfw3.h>
 
 #include <cstdint>
