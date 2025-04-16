@@ -2,9 +2,9 @@
 
 #include <bnb/player_api/interfaces/render_delegate.hpp>
 
-#include <bnb/scene/interfaces/render_backend_type.hpp>
+//#include <bnb/scene/interfaces/render_backend_type.hpp>
 // For v1.17+
-//#include <bnb/types/interfaces/render_backend_type.hpp>
+#include <bnb/types/interfaces/render_backend_type.hpp>
 
 #include "GlfwWindow.hpp"
 
