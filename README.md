@@ -58,7 +58,7 @@ To get latest Banuba SDK build follow [Releases](https://github.com/Banuba/FaceA
         cd build
         cmake -G Xcode ..
     ```
-6. Previous step will generate Xcode project for MacOS and Visual Studio project for Windows. Open project in appropriate IDE on your platform.
+6. Previous step will generate Xcode project for MacOS in `build` folder. Open project in XCode.
 7. Select target `single-image-processing`, `realtime-camera-preview` or `videostream-processing`.
 8. Run build.
 
