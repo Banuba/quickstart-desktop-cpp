@@ -1,5 +1,5 @@
 if (APPLE)
-    set(BNB_SDK_ARCH "mac")
+    set(BNB_SDK_ARCH "mac/BanubaEffectPlayer.xcframework/macos-arm64_x86_64")
     set(SDK_FILE_TYPE "framework")
     set(SDK_EFFECT_PLAYER_LIB "BanubaEffectPlayer")
 else()
