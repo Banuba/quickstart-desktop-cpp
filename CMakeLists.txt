@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.10)
 
 project(quickstart-desktop-cpp)
 
@@ -39,8 +39,20 @@ include(${CMAKE_CURRENT_LIST_DIR}/cmake/copy_libs.cmake)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/bnb_sdk)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/helpers)
 
+# The samples only use the GLFW library.  Keeping its documentation out of the
+# default build avoids running a bundled, old Doxygen configuration.
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation" FORCE)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/third/glfw)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/third/stb)
+
+# Keep diagnostics enabled for the samples while silencing two known warnings
+# in the unmodified, externally maintained stb submodule.
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+    target_compile_options(stb PRIVATE
+        $<$<COMPILE_LANGUAGE:C>:-Wno-tautological-compare>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-shorten-64-to-32>
+    )
+endif()
 
 option(DEPLOY_BUILD "Build for deployment" OFF)
 

@@ -7,7 +7,8 @@ target_link_libraries(single-image-processing
 )
 
 if (APPLE)
-    set(EXAMPLE_BUNDLE_NAME "Banuba Single Image Processing Example") # This name can contain up to 15 characters according to Apple's documentation
+    set(EXAMPLE_BUNDLE_NAME "Banuba Single Image Processing Example")
+    set(EXAMPLE_BUNDLE_IDENTIFIER "com.banuba.sdk.example.image")
     set(EXAMPLE_COPYRIGHT "© 2023 Banuba. All rights reserved.")
     set(EXAMPLE_INFO "Banuba Single Image Processing Example.")
 
@@ -20,11 +21,12 @@ if (APPLE)
 
         MACOSX_BUNDLE_BUNDLE_NAME           ${EXAMPLE_BUNDLE_NAME}    # Sets CFBundleName
         MACOSX_BUNDLE_COPYRIGHT             ${EXAMPLE_COPYRIGHT}      # Sets NSHumanReadableCopyright
-        MACOSX_BUNDLE_GUI_IDENTIFIER        "com.banuba.sdk.example.image"  # Sets CFBundleIdentifier
+        MACOSX_BUNDLE_GUI_IDENTIFIER        ${EXAMPLE_BUNDLE_IDENTIFIER}  # Sets CFBundleIdentifier
         MACOSX_BUNDLE_INFO_STRING           ${EXAMPLE_INFO}           # Sets CFBundleGetInfoString
 
         # Explicitly skip code signing (CMake tries to turn it on for application bundles)
         XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${EXAMPLE_BUNDLE_IDENTIFIER}
     )
 endif()
 

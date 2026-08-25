@@ -10,8 +10,15 @@
 #include <bnb/player_api/interfaces/render_target/opengl_render_target.hpp>
 #include <bnb/player_api/interfaces/render_target/metal_render_target.hpp>
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 #include <filesystem>
 
 using namespace bnb::interfaces;
@@ -24,9 +31,9 @@ namespace
 int main()
 {
     #if defined(__APPLE__)
-    const auto result_path = (std::filesystem::temp_directory_path() / "bnb_result.jpg").string();
+    const auto result_path = (std::filesystem::temp_directory_path() / "bnb_result.png").string();
     #else
-    const auto result_path = (std::filesystem::current_path() / "bnb_result.jpg").string();
+    const auto result_path = (std::filesystem::current_path() / "bnb_result.png").string();
     #endif
     
     // Initialize BanubaSDK with token and paths to resources
@@ -43,14 +50,14 @@ int main()
     // that is called when frames are received and saves it to a file.
     auto frame_output = bnb::player_api::opengl_frame_output::create([player, result_path](const bnb::full_image_t& pb) {
         stbi_write_png(
-            (result_path + ".png").c_str(),
+            result_path.c_str(),
             pb.get_width(),
             pb.get_height(),
             pb.get_bytes_per_pixel(),
             pb.get_base_ptr(),
             pb.get_bytes_per_row()
         );
-        std::printf("Processing result was written to `%s`. \n", result_path.c_str());
+        std::printf("Processing result was written to `%s`.\n", result_path.c_str());
     }, bnb::pixel_buffer_format::bpc8_rgba);
     // Sync effect loading
     player->load("effects/TrollGrandma");

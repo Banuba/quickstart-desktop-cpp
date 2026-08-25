@@ -17,7 +17,7 @@ namespace
         fprintf(stderr, "GLFW Error: %s\n", description);
     }
 
-    void calculate_window_size_and_pos(int32_t& x, int32_t& y, int32_t& w, int32_t& h)
+    bool calculate_window_size_and_pos(int32_t& x, int32_t& y, int32_t& w, int32_t& h)
     {
         //
         // All calculation are based on GLFW's screen coordinates
@@ -28,13 +28,13 @@ namespace
         GLFWmonitor* primary_monitor = glfwGetPrimaryMonitor();
 
         if (primary_monitor == nullptr) {
-            throw std::runtime_error("glfwGetPrimaryMonitor() error");
+            return false;
         }
 
         const GLFWvidmode* current_video_mode = glfwGetVideoMode(primary_monitor);
 
         if (current_video_mode == nullptr) {
-            throw std::runtime_error("glfwGetVideoMode() error");
+            return false;
         }
 
         auto screen_height = static_cast<float>(current_video_mode->height);
@@ -54,6 +54,7 @@ namespace
         y = static_cast<int32_t>(std::max((screen_height - scaled_h), 0.f) / 2.f);
         w = static_cast<int32_t>(scaled_w);
         h = static_cast<int32_t>(scaled_h);
+        return true;
     }
 
 } /* namespace */
@@ -96,9 +97,8 @@ GlfwWindow::GlfwWindow(const std::string_view& title, render_backend_type render
     if (m_render_backend == render_backend_type::opengl) {
         glfwMakeContextCurrent(m_window);
         bnb::utility::load_gl_functions();
+        glfwSwapInterval(0);
     }
-
-    glfwSwapInterval(0);
 
     track_events();
 }
@@ -139,9 +139,10 @@ void GlfwWindow::swap_buffers()
 void GlfwWindow::show_window_and_run_events_loop()
 {
     int32_t x, y, w, h;
-    calculate_window_size_and_pos(x, y, w, h);
-    glfwSetWindowPos(m_window, x, y);
-    glfwSetWindowSize(m_window, w, h);
+    if (calculate_window_size_and_pos(x, y, w, h)) {
+        glfwSetWindowPos(m_window, x, y);
+        glfwSetWindowSize(m_window, w, h);
+    }
     glfwShowWindow(m_window);
 
     while (!glfwWindowShouldClose(m_window)) {

@@ -1,10 +1,8 @@
 set(HELPERS_SOURCES
-    src/GlfwRenderer.cpp
     src/GlfwRenderer.hpp
     src/GlfwWindow.cpp
     src/GlfwWindow.hpp
     src/Utils.hpp
-    src/Utils.cpp
     src/BanubaClientToken.hpp
 )
 
@@ -12,6 +10,11 @@ if(APPLE)
     list(APPEND HELPERS_SOURCES
         src/Utils.mm
         src/GlfwRenderer.mm
+    )
+else()
+    list(APPEND HELPERS_SOURCES
+        src/Utils.cpp
+        src/GlfwRenderer.cpp
     )
 endif()
 

@@ -31,6 +31,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>Camera access is used to demonstrate real-time face effects.</string>
 </dict>
 </plist>
