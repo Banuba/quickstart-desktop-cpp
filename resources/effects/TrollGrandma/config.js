@@ -16,9 +16,7 @@ function Effect() {
         Api.meshfxMsg("spawn", 2, 0, "!glfx_FACE");
         Api.meshfxMsg("spawn", 0, 0, "Trollma_morphing.bsm2");
         Api.meshfxMsg("spawn", 1, 0, "TrollGrandma.bsm2");
-        if(Api.getPlatform() == "iOS"){
-            Api.showHint("Voice changer");
-        };
+
         self.time = (new Date()).getTime() + 3000;
         self.faceActions = [self.play];
         Api.showRecordButton();
@@ -27,14 +25,9 @@ function Effect() {
         Api.meshfxReset();
         self.init();
     };
-    this.stopSound = function () {
-        if(Api.getPlatform() == "ios") {
-            Api.hideHint();                
-        };
-    };
     this.faceActions = [];
     this.noFaceActions = [];
-    this.videoRecordStartActions = [self.stopSound];
+    this.videoRecordStartActions = [];
     this.videoRecordFinishActions = [];
     this.videoRecordDiscardActions = [this.restart];
 }
